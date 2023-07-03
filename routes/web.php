@@ -4,11 +4,10 @@ use App\Http\Controllers\{
     KkjController,
     RoleController,
 };
+use App\Http\Controllers\Dashboard\DashboardController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/dashboard', [DashboardController::class, 'index'])->name("dashboard");
 
 Route::resource("role", RoleController::class);
 Route::resource("kkj", KkjController::class);

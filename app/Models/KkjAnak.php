@@ -13,4 +13,9 @@ class KkjAnak extends Model
     public function kkj(){
         return $this->belongsTo(Kkj::class);
     }
+
+    public function kkj_kepala_keluarga()
+    {
+        return $this->belongsTo(KkjKepalaKeluarga::class, "kkj_id");
+    }
 }

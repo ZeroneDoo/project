@@ -6,11 +6,13 @@ use App\Http\Requests\KKJ\{
     StoreRequest,
     UpdateRequest
 };
-use App\Models\Kkj;
-use App\Models\KkjAnak;
-use App\Models\KkjKeluarga;
-use App\Models\KkjKepalaKeluarga;
-use App\Models\KkjPasangan;
+use App\Models\{
+    Kkj,
+    KkjAnak,
+    KkjKeluarga,
+    KkjKepalaKeluarga,
+    KkjPasangan
+};
 use Illuminate\Http\Request;
 
 class KkjController extends Controller
@@ -18,13 +20,15 @@ class KkjController extends Controller
     public function index()
     {
         $datas = Kkj::paginate(4);
+
         return view("kkj.index", compact('datas'));
     }
 
     public function create()
     {
         $status_menikah = ["Sudah Menikah", "Belum Menikah", "Cerai"];
-        return view("kkj.form", compact("status_menikah"));
+        $jenjangs = ['SD', 'SMP', 'SMA/Sederajat', 'D1', 'D2', "D3", 'S1', 'S2', "S3"];
+        return view("kkj.form", compact("status_menikah", 'jenjangs'));
     }
 
     public function store(StoreRequest $request)
@@ -47,7 +51,8 @@ class KkjController extends Controller
     {
         $data = Kkj::with(['kkj_kepala_keluarga', 'kkj_pasangan', 'kkj_anak', 'kkj_keluarga'])->find($kkj->id);
         $status_menikah = ["Sudah Menikah", "Belum Menikah", "Cerai"];
-        return view("kkj.form", compact("data", "status_menikah"));
+        $jenjangs = ['SD', 'SMP', 'SMA/Sederajat', 'D1', 'D2', "D3", 'S1', 'S2', "S3"];
+        return view("kkj.form", compact("data", "status_menikah", 'jenjangs'));
     }
 
     public function update(UpdateRequest $request, Kkj $kkj)

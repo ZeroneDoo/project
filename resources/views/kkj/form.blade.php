@@ -26,7 +26,7 @@
                 <h5 class="card-title" style="margin-bottom: 1.5rem">{{ isset($data) ? 'Ubah Kartu Keluarga Jemaat' : 'Buat Kartu Keluarga Jemaat' }}</h5>
                 <div class="form-group">
                     <label for="email">Email *</label>
-                    <input type="email" class="form-control" name="email" value="{{ isset($data) ? $data->email : old('email') }}"
+                    <input type="email" required class="form-control" name="email" value="{{ isset($data) ? $data->email : old('email') }}"
                         style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="email">
                 </div>
                 <div class="form-group">
@@ -35,18 +35,18 @@
                 </div>
                 <div class="form-group">
                     <label for="rt_rw">RT/RW *</label>
-                    <input type="text" class="form-control" value="{{ isset($data) ? $data->rt_rw : old('rt_rw') }}" style="margin-top: 0.75rem; margin-bottom: 0.75rem"
+                    <input type="text" required class="form-control" value="{{ isset($data) ? $data->rt_rw : old('rt_rw') }}" style="margin-top: 0.75rem; margin-bottom: 0.75rem"
                         name="rt_rw" id="rt_rw">
                 </div>
                 <div class="form-group">
                     <label for="telp">No Telepon *</label>
-                    <input type="number" class="form-control" value="{{ isset($data) ? $data->telp : old('telp') }}" style="margin-top: 0.75rem; margin-bottom: 0.75rem"
+                    <input type="number" required class="form-control" value="{{ isset($data) ? $data->telp : old('telp') }}" style="margin-top: 0.75rem; margin-bottom: 0.75rem"
                         name="telp" id="telp">
                 </div>
                 <div class="form-group">
                     <label for="provinsi">Provinsi *</label>
                     <div style="margin-top: 0.75rem; margin-bottom: 0.75rem">
-                        <select name="provinsi" onchange="Component.getKota(this)" class="form-select" id="provinsi">
+                        <select name="provinsi" required onchange="Component.getKota(this)" class="form-select" id="provinsi">
                             <option></option>
                             {{-- ajax --}}
                         </select>
@@ -58,7 +58,7 @@
                 <div class="form-group">
                     <label for="kabupaten">Kabupaten/Kota *</label>
                     <div style="margin-top: 0.75rem; margin-bottom: 0.75rem">
-                        <select name="kabupaten" onchange="Component.getKecamatan(this)" class="form-select" id="kabupaten">
+                        <select name="kabupaten" required onchange="Component.getKecamatan(this)" class="form-select" id="kabupaten">
                             <option></option>
                             {{-- ajax --}}
                         </select>
@@ -70,7 +70,7 @@
                 <div class="form-group">
                     <label for="kecamatan">Kecamatan *</label>
                     <div style="margin-top: 0.75rem; margin-bottom: 0.75rem">
-                        <select name="kecamatan" class="form-select" id="kecamatan">
+                        <select name="kecamatan" required class="form-select" id="kecamatan">
                             <option></option>
                             {{-- ajax --}}
                         </select>
@@ -81,7 +81,7 @@
                 </div>
                 <div class="form-group">
                     <label for="status_menikah">Status Menikah *</label>
-                    <select name="status_menikah" style="margin-top: 0.75rem; margin-bottom: 0.75rem"
+                    <select name="status_menikah" required style="margin-top: 0.75rem; margin-bottom: 0.75rem"
                         class="form-select" id="status_menikah" onchange="Component.statusMenikah(this)">
                         <option value="" hidden selected>Status Menikah</option>
                         @foreach ($status_menikah as $status)
@@ -102,11 +102,11 @@
                             <label for="nama_kepala_keluarga">Nama Lengkap *</label>
                             <div class="row" style="margin-top: 0.75rem; margin-bottom: 0.75rem">
                                 <div class="col">
-                                    <input type="text" value="{{ isset($data) ? $data->kkj_kepala_keluarga->nama : old("nama_kepala_keluarga")}}" class="form-control" name="nama_kepala_keluarga"
+                                    <input type="text" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->nama : old("nama_kepala_keluarga")}}" class="form-control" name="nama_kepala_keluarga"
                                         id="nama_kepala_keluarga">
                                 </div>
                                 <div class="col-5">
-                                    <select name="jk" class="form-select" id="jk">
+                                    <select name="jk" required class="form-select" id="jk">
                                         <option value="" hidden selected>Jenis Kelamin</option>
                                         <option {{ isset($data) ? ($data->kkj_kepala_keluarga->jk == "L" ? 'selected' : '') : '' }} value="L">Laki-Laki</option>
                                         <option {{ isset($data) ? ($data->kkj_kepala_keluarga->jk == "P" ? 'selected' : '') : '' }} value="P">Perempuan</option>
@@ -116,35 +116,35 @@
                         </div>
                         <div class="form-group">
                             <label for="tmpt_lahir">Tempat Lahir *</label>
-                            <input type="text" value="{{ isset($data) ? $data->kkj_kepala_keluarga->tmpt_lahir : old('tmpt_lahir') }}" class="form-control" name="tmpt_lahir"
+                            <input type="text" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->tmpt_lahir : old('tmpt_lahir') }}" class="form-control" name="tmpt_lahir"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tmpt_lahir">
                         </div>
                         <div class="form-group">
                             <label for="tgl_lahir">Tanggal Lahir *</label>
-                            <input type="date" value="{{ isset($data) ? $data->kkj_kepala_keluarga->tgl_lahir : old('tgl_lahir') }}" class="form-control" name="tgl_lahir"
+                            <input type="date" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->tgl_lahir : old('tgl_lahir') }}" class="form-control" name="tgl_lahir"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tgl_lahir">
                         </div>
                         <div class="form-group">
                             <label for="pendidikan_terakhir">Pendidikan Terakhir  *</label>
-                            <input type="text" value="{{ isset($data) ? $data->kkj_kepala_keluarga->pendidikan_terakhir : old('pendidikan_terakhir') }}" class="form-control" name="pendidikan_terakhir"
+                            <input type="text" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->pendidikan_terakhir : old('pendidikan_terakhir') }}" class="form-control" name="pendidikan_terakhir"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pendidikan_terakhir">
                         </div>
                         <div class="form-group">
                             <label for="pekerjaan">Pekerjaan  *</label>
-                            <input type="text" value="{{ isset($data) ? $data->kkj_kepala_keluarga->pekerjaan : old('pekerjaan') }}" class="form-control" name="pekerjaan"
+                            <input type="text" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->pekerjaan : old('pekerjaan') }}" class="form-control" name="pekerjaan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pekerjaan">
                         </div>
                         <div class="form-group">
                             <label for="baptis_date">Baptis Selam *</label>
-                            <input type="date" value="{{ isset($data) ? $data->kkj_kepala_keluarga->baptis : old('baptis') }}" class="form-control" name="baptis_date"
+                            <input type="date" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->baptis : old('baptis') }}" class="form-control" name="baptis_date"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="baptis_date">
                         </div>
                     </div>
                 </div>
             </div>
             {{-- pasangan --}}
-            @if (isset($data->kkj_pasangan))
-            <div class="col" id="card_pasangan" aria-disabled="true" hidden>
+            @if (isset($data->kkj_pasangan) && isset($data))
+            <div class="col" id="card_pasangan" hidden>
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title" style="margin-bottom: 1.5rem">Pasangan</h5>
@@ -152,11 +152,11 @@
                             <label for="nama_pasangan">Nama Lengkap *</label>
                             <div class="row" style="margin-top: 0.75rem; margin-bottom: 0.75rem">
                                 <div class="col">
-                                    <input type="text" value="{{ isset($data) ? $data->kkj_pasangan->nama : old('nama') }}" class="form-control" name="nama_pasangan"
+                                    <input type="text" required value="{{ isset($data) ? $data->kkj_pasangan->nama : old('nama') }}" class="form-control" name="nama_pasangan"
                                         id="nama_pasangan">
                                 </div>
                                 <div class="col-5">
-                                    <select name="jk_pasangan" class="form-select" id="jk_pasangan">
+                                    <select name="jk_pasangan" required class="form-select" id="jk_pasangan">
                                         <option value="" hidden selected>Jenis Kelamin</option>
                                         <option {{ isset($data) ? ($data->kkj_pasangan->jk == "L" ? 'selected' : '' ) : '' }} value="L">Laki-Laki</option>
                                         <option {{ isset($data) ? ($data->kkj_pasangan->jk == "P" ? 'selected' : '') : '' }} value="P">Perempuan</option>
@@ -166,27 +166,76 @@
                         </div>
                         <div class="form-group">
                             <label for="tmpt_lahir_pasangan">Tempat Lahir *</label>
-                            <input type="text" class="form-control" value="{{ isset($data) ? $data->kkj_pasangan->tmpt_lahir : old('tmpt_lahir') }}" name="tmpt_lahir_pasangan"
+                            <input type="text" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->tmpt_lahir : old('tmpt_lahir') }}" name="tmpt_lahir_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tmpt_lahir_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="tgl_lahir_pasangan">Tanggal Lahir *</label>
-                            <input type="date" class="form-control" value="{{ isset($data) ? $data->kkj_pasangan->tgl_lahir : old('tgl_lahir') }}" name="tgl_lahir_pasangan"
+                            <input type="date" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->tgl_lahir : old('tgl_lahir') }}" name="tgl_lahir_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tgl_lahir_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="pendidikan_terakhir_pasangan">Pendidikan Terakhir  *</label>
-                            <input type="text" class="form-control" value="{{ isset($data) ? $data->kkj_pasangan->pendidikan_terakhir : old('pendidikan_terakhir') }}" name="pendidikan_terakhir_pasangan"
+                            <input type="text" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->pendidikan_terakhir : old('pendidikan_terakhir') }}" name="pendidikan_terakhir_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pendidikan_terakhir_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="pekerjaan_pasangan">Pekerjaan  *</label>
-                            <input type="text" class="form-control" value="{{ isset($data) ? $data->kkj_pasangan->pekerjaan : old('pekerjaan') }}" name="pekerjaan_pasangan"
+                            <input type="text" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->pekerjaan : old('pekerjaan') }}" name="pekerjaan_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pekerjaan_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="baptis_date_pasangan">Baptis Selam *</label>
-                            <input type="date" class="form-control" value="{{ isset($data) ? $data->kkj_pasangan->baptis : old('baptis') }}" name="baptis_date_pasangan"
+                            <input type="date" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->baptis : old('baptis') }}" name="baptis_date_pasangan"
+                                style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="baptis_date_pasangan">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @elseif(!isset($data))
+            <div class="col" id="card_pasangan" hidden>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" style="margin-bottom: 1.5rem">Pasangan</h5>
+                        <div class="form-group">
+                            <label for="nama_pasangan">Nama Lengkap *</label>
+                            <div class="row" style="margin-top: 0.75rem; margin-bottom: 0.75rem">
+                                <div class="col">
+                                    <input type="text" required value="{{ isset($data) ? $data->kkj_pasangan->nama : old('nama') }}" class="form-control" name="nama_pasangan"
+                                        id="nama_pasangan">
+                                </div>
+                                <div class="col-5">
+                                    <select name="jk_pasangan" required class="form-select" id="jk_pasangan">
+                                        <option value="" hidden selected>Jenis Kelamin</option>
+                                        <option {{ isset($data) ? ($data->kkj_pasangan->jk == "L" ? 'selected' : '' ) : '' }} value="L">Laki-Laki</option>
+                                        <option {{ isset($data) ? ($data->kkj_pasangan->jk == "P" ? 'selected' : '') : '' }} value="P">Perempuan</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="tmpt_lahir_pasangan">Tempat Lahir *</label>
+                            <input type="text" required class="form-control" value="{{ isset($data) ? $data->kkj_pasangan->tmpt_lahir : old('tmpt_lahir') }}" name="tmpt_lahir_pasangan"
+                                style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tmpt_lahir_pasangan">
+                        </div>
+                        <div class="form-group">
+                            <label for="tgl_lahir_pasangan">Tanggal Lahir *</label>
+                            <input type="date" required class="form-control" value="{{ isset($data) ? $data->kkj_pasangan->tgl_lahir : old('tgl_lahir') }}" name="tgl_lahir_pasangan"
+                                style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tgl_lahir_pasangan">
+                        </div>
+                        <div class="form-group">
+                            <label for="pendidikan_terakhir_pasangan">Pendidikan Terakhir  *</label>
+                            <input type="text" required class="form-control" value="{{ isset($data) ? $data->kkj_pasangan->pendidikan_terakhir : old('pendidikan_terakhir') }}" name="pendidikan_terakhir_pasangan"
+                                style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pendidikan_terakhir_pasangan">
+                        </div>
+                        <div class="form-group">
+                            <label for="pekerjaan_pasangan">Pekerjaan  *</label>
+                            <input type="text" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->pekerjaan : old('pekerjaan') }}" name="pekerjaan_pasangan"
+                                style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pekerjaan_pasangan">
+                        </div>
+                        <div class="form-group">
+                            <label for="baptis_date_pasangan">Baptis Selam *</label>
+                            <input type="date" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->baptis : old('baptis') }}" name="baptis_date_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="baptis_date_pasangan">
                         </div>
                     </div>
@@ -215,7 +264,7 @@
             @if (isset($data))
                 @foreach ($data->kkj_anak as $anak)
                 <div class="col-sm-6">
-                    <input type="hidden" name="id_anak[]" value="{{ $anak->id }}" id="id_anak">
+                    <input type="hidden" required name="id_anak[]" value="{{ $anak->id }}" id="id_anak">
                         <div class="card">
                             <div style="display: flex; justify-content: space-between; padding: 0.75rem">
                                 <p style="font-size: 20px; font-weight: 500">{{ $anak->nama }}</p>
@@ -227,7 +276,7 @@
                                     <label for="nama_anak_edit">Nama Lengkap *</label>
                                     <div class="row" style="margin-top: 0.75rem; margin-bottom: 0.75rem">
                                         <div class="col">
-                                            <input type="text" value="{{ isset($data) ? $anak->nama : old("nama_anak_edit") }}" class="form-control" name="nama_anak_edit[]"
+                                            <input type="text" required value="{{ isset($data) ? $anak->nama : old("nama_anak_edit") }}" class="form-control" name="nama_anak_edit[]"
                                                 id="nama_anak_edit">
                                         </div>
                                         <div class="col-5">
@@ -241,17 +290,17 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="tmpt_lahir_anak_edit">Tempat Lahir *</label>
-                                    <input type="text" value="{{ isset($data) ? $anak->tmpt_lahir : old("tmpt_lahir_anak_edit") }}" class="form-control" name="tmpt_lahir_anak_edit[]"
+                                    <input type="text" required value="{{ isset($data) ? $anak->tmpt_lahir : old("tmpt_lahir_anak_edit") }}" class="form-control" name="tmpt_lahir_anak_edit[]"
                                         style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tmpt_lahir_anak_edit">
                                 </div>
                                 <div class="form-group">
                                     <label for="tgl_lahir_anak_edit">Tanggal Lahir *</label>
-                                    <input type="date" value="{{ isset($data) ? $anak->tgl_lahir : old("tgl_lahir_anak_edit") }}" class="form-control" name="tgl_lahir_anak_edit[]"
+                                    <input type="date" required value="{{ isset($data) ? $anak->tgl_lahir : old("tgl_lahir_anak_edit") }}" class="form-control" name="tgl_lahir_anak_edit[]"
                                         style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tgl_lahir_anak_edit">
                                 </div>
                                 <div class="form-group">
                                     <label for="pendidikan_anak_edit">Pendidikan *</label>
-                                    <input type="text" value="{{ isset($data) ? $anak->pendidikan : old("pendidikan_anak_edit") }}" class="form-control" name="pendidikan_anak_edit[]"
+                                    <input type="text" required value="{{ isset($data) ? $anak->pendidikan : old("pendidikan_anak_edit") }}" class="form-control" name="pendidikan_anak_edit[]"
                                         style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pendidikan_anak_edit">
                                 </div>
                                 <div class="form-group">
@@ -261,7 +310,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="diserahkan_anak_edit">Diserahkan *</label>
-                                    <select name="diserahkan_anak_edit[]" style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="diserahkan_anak_edit">
+                                    <select name="diserahkan_anak_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="diserahkan_anak_edit">
                                         <option value="" hidden selected>Diserahkan</option>
                                         <option {{ isset($data) ? ($anak->diserahkan == "Y" ? 'selected' : '') : '' }} value="Y">Iya</option>
                                         <option {{ isset($data) ? ($anak->diserahkan == "T" ? 'selected' : '') : '' }} value="T">Tidak</option>
@@ -269,7 +318,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="baptis_anak_edit">Baptis Selam *</label>
-                                    <select name="baptis_anak_edit[]" style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_anak_edit">
+                                    <select name="baptis_anak_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_anak_edit">
                                         <option value="" hidden selected>Baptis Selam</option>
                                         <option {{ isset($data) ? ($anak->baptis == "Y" ? 'selected' : '') : '' }} value="Y">Iya</option>
                                         <option {{ isset($data) ? ($anak->baptis == "T" ? 'selected' : '') : '' }} value="T">Tidak</option>
@@ -277,7 +326,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="nikah_anak_edit">Nikah *</label>
-                                    <select name="nikah_anak_edit[]" style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="nikah_anak_edit">
+                                    <select name="nikah_anak_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="nikah_anak_edit">
                                         <option value="" hidden selected>Nikah</option>
                                         <option {{ isset($data) ? ($anak->nikah == "Y" ? 'selected' : '') : '' }} value="Y">Iya</option>
                                         <option {{ isset($data) ? ($anak->nikah == "T" ? 'selected' : '') : '' }} value="T">Tidak</option>
@@ -310,7 +359,7 @@
             @if (isset($data))
                 @foreach ($data->kkj_keluarga as $keluarga)
                 <div class="col-sm-6">
-                    <input type="hidden" name="id_keluarga[]" value="{{ $keluarga->id }}" id="id_keluarga">
+                    <input required type="hidden" name="id_keluarga[]" value="{{ $keluarga->id }}" id="id_keluarga">
                         <div class="card">
                             <div style="display: flex; justify-content: space-between; padding: 0.75rem">
                                 <p style="font-size: 20px; font-weight: 500">{{ $keluarga->nama }}</p>
@@ -322,11 +371,11 @@
                                     <label for="nama_keluarga_edit">Nama Lengkap *</label>
                                     <div class="row" style="margin-top: 0.75rem; margin-bottom: 0.75rem">
                                         <div class="col">
-                                            <input type="text" value="{{ $keluarga->nama }}" class="form-control" name="nama_keluarga_edit[]"
+                                            <input type="text" required value="{{ $keluarga->nama }}" class="form-control" name="nama_keluarga_edit[]"
                                                 id="nama_keluarga_edit">
                                         </div>
                                         <div class="col-5">
-                                            <select name="jk_keluarga_edit[]" class="form-select" id="jk_keluarga_edit">
+                                            <select name="jk_keluarga_edit[]" required class="form-select" id="jk_keluarga_edit">
                                                 <option value="" hidden selected>Jenis Kelamin</option>
                                                 <option {{ $keluarga->jk == "L" ? 'selected' : '' }} value="L">Laki-Laki</option>
                                                 <option {{ $keluarga->jk == "P" ? 'selected' : '' }} value="P">Perempuan</option>
@@ -336,17 +385,17 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="tmpt_lahir_keluarga_edit">Tempat Lahir *</label>
-                                    <input type="text" class="form-control" value="{{ $keluarga->tmpt_lahir }}" name="tmpt_lahir_keluarga_edit[]"
+                                    <input type="text" class="form-control" required value="{{ $keluarga->tmpt_lahir }}" name="tmpt_lahir_keluarga_edit[]"
                                         style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tmpt_lahir_keluarga_edit">
                                 </div>
                                 <div class="form-group">
                                     <label for="tgl_lahir_keluarga_edit">Tanggal Lahir *</label>
-                                    <input type="date" class="form-control" value="{{ $keluarga->tgl_lahir }}" name="tgl_lahir_keluarga_edit[]"
+                                    <input type="date" class="form-control" required value="{{ $keluarga->tgl_lahir }}" name="tgl_lahir_keluarga_edit[]"
                                         style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tgl_lahir_keluarga_edit">
                                 </div>
                                 <div class="form-group">
                                     <label for="pendidikan_keluarga_edit">Pendidikan *</label>
-                                    <input type="text" class="form-control" value="{{ $keluarga->pendidikan }}" name="pendidikan_keluarga_edit[]"
+                                    <input type="text" class="form-control" required value="{{ $keluarga->pendidikan }}" name="pendidikan_keluarga_edit[]"
                                         style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pendidikan_keluarga_edit">
                                 </div>
                                 <div class="form-group">
@@ -356,7 +405,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="diserahkan_keluarga_edit">Diserahkan *</label>
-                                    <select name="diserahkan_keluarga_edit[]" style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="diserahkan_keluarga_edit">
+                                    <select name="diserahkan_keluarga_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="diserahkan_keluarga_edit">
                                         <option value="" hidden selected>Diserahkan</option>
                                         <option {{ $keluarga->diserahkan == "Y" ? 'selected' : "" }} value="Y">Iya</option>
                                         <option {{ $keluarga->diserahkan == "T" ? 'selected' : "" }} value="T">Tidak</option>
@@ -364,7 +413,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="baptis_keluarga_edit">Baptis Selam *</label>
-                                    <select name="baptis_keluarga_edit[]" style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_keluarga_edit">
+                                    <select name="baptis_keluarga_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_keluarga_edit">
                                         <option value="" hidden selected>Baptis Selam</option>
                                         <option {{ $keluarga->baptis == "Y" ? 'selected' : "" }} value="Y">Iya</option>
                                         <option {{ $keluarga->baptis == "T" ? 'selected' : "" }} value="T">Tidak</option>
@@ -372,7 +421,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="nikah_keluarga_edit">Nikah *</label>
-                                    <select name="nikah_keluarga_edit[]" style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="nikah_keluarga_edit">
+                                    <select name="nikah_keluarga_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="nikah_keluarga_edit">
                                         <option value="" hidden selected>Nikah</option>
                                         <option {{ $keluarga->nikah == "Y" ? 'selected' : "" }} value="Y">Iya</option>
                                         <option {{ $keluarga->nikah == "T" ? 'selected' : "" }} value="T">Tidak</option>
@@ -418,13 +467,13 @@
                 $("#provinsi").val() ? $("#kabupaten").prop("disabled", false) : $("#kabupaten").prop("disabled", true) 
                 $("#provinsi").val() && $("#kabupaten").val() ? $("#kecamatan").prop("disabled", false) : $("#kecamatan").prop("disabled", true)
             } 
-
             
             Component.getProvinsi()
         });
     </script>
 
     @if (isset($data))
+    {{-- mengambil api daerah untuk di edit  --}}
         <script>
             async function getDaerah () { 
                 await Component.getProvinsi("{{ $data->provinsi }}")
