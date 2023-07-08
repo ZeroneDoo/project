@@ -22,4 +22,7 @@ class Kkj extends Model
     public function kkj_keluarga(){
         return $this->hasMany(KkjKeluarga::class);
     }
+    public function urgent(){
+        return $this->hasOne(Urgent::class);
+    }
 }

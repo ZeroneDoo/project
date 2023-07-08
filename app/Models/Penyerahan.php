@@ -10,4 +10,13 @@ class Penyerahan extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function kkj_anak()
+    {
+        return $this->belongsTo(KkjAnak::class);
+    }
+    public function kkj_keluarga()
+    {
+        return $this->belongsTo(KkjKeluarga::class);
+    }
 }

@@ -28,14 +28,16 @@ class KkjController extends Controller
     {
         $status_menikah = ["Sudah Menikah", "Belum Menikah", "Cerai"];
         $jenjangs = ['SD', 'SMP', 'SMA/Sederajat', 'D1', 'D2', "D3", 'S1', 'S2', "S3"];
-        return view("kkj.form", compact("status_menikah", 'jenjangs'));
+        $hubungans = ['Saudara', "Paman", "Bibi", "Kakek", "Nenek"];
+        return view("kkj.form", compact("status_menikah", 'jenjangs', 'hubungans'));
     }
 
     public function store(StoreRequest $request)
     {
         try {
-            kartu_keluarga_jemaat($request->all());
-
+            $kkj = kartu_keluarga_jemaat($request->all());
+            send_pdf_email($kkj, $request->email, 'kkj');
+            
             return redirect()->route("kkj.index")->with("msg_success", "Berhasil menambahkan kartu keluarga jemaat");
         } catch (\Throwable $th) {
             return redirect()->route("kkj.index")->with("msg_error", "Gagal menambahkan kartu keluarga jemaat");
@@ -52,13 +54,16 @@ class KkjController extends Controller
         $data = Kkj::with(['kkj_kepala_keluarga', 'kkj_pasangan', 'kkj_anak', 'kkj_keluarga'])->find($kkj->id);
         $status_menikah = ["Sudah Menikah", "Belum Menikah", "Cerai"];
         $jenjangs = ['SD', 'SMP', 'SMA/Sederajat', 'D1', 'D2', "D3", 'S1', 'S2', "S3"];
-        return view("kkj.form", compact("data", "status_menikah", 'jenjangs'));
+        $hubungans = ['Saudara', "Paman", "Bibi", "Kakek", "Nenek"];
+        return view("kkj.form", compact("data", "status_menikah", 'jenjangs', 'hubungans'));
     }
 
     public function update(UpdateRequest $request, Kkj $kkj)
     {
         try {
-            edit_kartu_kerluarga_jemaat($request->all(), $kkj->id);
+            $kkj = edit_kartu_kerluarga_jemaat($request->all(), $kkj->id);
+            send_pdf_email($kkj, $request->email, 'kkj');
+
             return redirect()->route("kkj.index")->with("msg_success", "Berhasil mengubah kartu keluarga jemaat");
         } catch (\Throwable $th) {
             return redirect()->route("kkj.index")->with("msg_error", "Gagal mengubah kartu keluarga jemaat");

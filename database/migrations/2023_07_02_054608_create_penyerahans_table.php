@@ -6,24 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 class CreatePenyerahansTable extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('penyerahans', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('kkj_anak_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('kkj_keluarga_id')->nullable()->constrained()->onDelete('cascade');
+            $table->timestamp('waktu');
+            $table->string('pendeta');
+            $table->string('foto');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('penyerahans');

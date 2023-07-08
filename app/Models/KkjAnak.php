@@ -18,4 +18,19 @@ class KkjAnak extends Model
     {
         return $this->belongsTo(KkjKepalaKeluarga::class, "kkj_id");
     }
+
+    public function kkj_pasangan()
+    {
+        return $this->belongsTo(KkjPasangan::class, "kkj_id");
+    }
+
+    public function baptiss()
+    {
+        return $this->hasOne(Baptis::class);
+    }
+
+    public function penyerahan()
+    {
+        return $this->hasOne(Penyerahan::class);
+    }
 }

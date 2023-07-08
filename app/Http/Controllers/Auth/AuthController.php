@@ -21,10 +21,11 @@ class AuthController extends Controller
     public function storeLogin(StoreRequest $request)
     {
         try {
-            $user = User::where("email", $request->email)->first();
+            // $user = User::with('role')->where("email", $request->email)->first();
+            $user = User::with('role')->where("nip", $request->nip)->first();
 
             if(!$user || !Hash::check($request->password, $user->password)) return redirect()->route('auth.store.login')->with("msg_error", "Email atau password salah");
-
+            
             Auth::login($user);
 
             return redirect()->route('dashboard')->with("msg_success", "Berhasil login");

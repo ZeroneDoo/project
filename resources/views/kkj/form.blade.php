@@ -14,12 +14,12 @@
 @endpush
 
 @section('content')
-<form action="{{ isset($data) ? route('kkj.update', $data->id) : route('kkj.store') }}" method="POST">
-@csrf
-@if (isset($data))
-    @method("patch")
-@endif
-<div style="margin: 3rem auto; width: 91%">
+<form action="{{ isset($data) ? route('kkj.update', $data->id) : route('kkj.store') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    @if (isset($data))
+        @method("patch")
+    @endif
+    <div style="margin: 3rem auto; width: 91%">
         {{-- data umum --}}
         <div class="card">
             <div class="card-body">
@@ -139,12 +139,18 @@
                             <input type="date" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->baptis : old('baptis') }}" class="form-control" name="baptis_date"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="baptis_date">
                         </div>
+                        <div class="form-group">
+                            <label for="foto">Foto Kepala Keluarga *</label>
+                            <input type="file" {{ isset($data) ? '' : 'required' }} class="form-control" name="foto"
+                                style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="foto">
+                        </div>
                     </div>
                 </div>
             </div>
             {{-- pasangan --}}
             @if (isset($data->kkj_pasangan) && isset($data))
             <div class="col" id="card_pasangan" hidden>
+                <input type="hidden" name="pasangan" value="pasangan">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title" style="margin-bottom: 1.5rem">Pasangan</h5>
@@ -194,6 +200,7 @@
             </div>
             @elseif(!isset($data))
             <div class="col" id="card_pasangan" hidden>
+                <input type="hidden" name="pasangan" value="pasangan">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title" style="margin-bottom: 1.5rem">Pasangan</h5>
@@ -344,10 +351,10 @@
                 <div class="card-body">
                     <div class="d-flex align-center justify-content-between">
                         <div class="flex-item">
-                            <p style="font-size: 20px; font-weight: 600;">Data Keluarga</p>
+                            <p style="font-size: 20px; font-weight: 600;">Data Keluarga/Orang Lain yang Tinggal Serumah</p>
                         </div>
                         <div class="flex-item">
-                            <button type="button" class="btn btn-primary" onclick="Component.tambahKeluarga()">+</button>
+                            <button type="button" class="btn btn-primary" onclick="Component.tambahKeluarga({hubungan: '{{ json_encode($hubungans) }}'})">+</button>
                         </div>
                     </div>
                 </div>
@@ -358,7 +365,7 @@
             {{-- ajax --}}
             @if (isset($data))
                 @foreach ($data->kkj_keluarga as $keluarga)
-                <div class="col-sm-6">
+                <div class="col-sm-6" style="margin-bottom: 1rem">
                     <input required type="hidden" name="id_keluarga[]" value="{{ $keluarga->id }}" id="id_keluarga">
                         <div class="card">
                             <div style="display: flex; justify-content: space-between; padding: 0.75rem">
@@ -427,11 +434,51 @@
                                         <option {{ $keluarga->nikah == "T" ? 'selected' : "" }} value="T">Tidak</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label for="">Hubungan *</label>
+                                    <select name="hubungan_keluarga_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="hubungan_keluarga_edit">
+                                        <option value="" hidden selected>Hubungan</option>
+                                        @foreach ($hubungans as $hubungan)
+                                        <option {{ $keluarga->hubungan == $hubungan ? 'selected' : "" }} value="{{ $hubungan }}">{{ $hubungan }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
                 @endforeach
             @endif
+        </div>
+        {{-- urgent --}}
+        <div class="card">
+            <div class="card-body">
+                <div class="card-title">
+                    <p style="font-size: 20px; font-weight: 500;">Keadaan Darurat/Penting</p>
+                </div>
+                <div class="form-group">
+                    <label for="nama_urgent">Nama/Keluarga *</label>
+                    <input type="text" required value="{{ isset($data) ? $data->urgent->nama : old('nama_urgent') }}" class="form-control" name="nama_urgent"
+                        style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="nama_urgent">
+                </div>
+                <div class="form-group">
+                    <label for="alamat_urgent">Alamat *</label>
+                    <textarea name="alamat_urgent" required id="alamat_urgent" class="form-control" style="margin-top: 0.75rem; margin-bottom: 0.75rem">{{ isset($data) ? $data->urgent->alamat : old('alamat_urgent') }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="telp_urgent">No Telpon*</label>
+                    <input type="number" required value="{{ isset($data) ? $data->urgent->telp : old('telp_urgent') }}" class="form-control" name="telp_urgent"
+                        style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="telp_urgent">
+                </div>
+                <div class="form-group">
+                    <label for="">Hubungan *</label>
+                    <select name="hubungan_urgent" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="hubungan_urgent">
+                        <option value="" hidden selected>Hubungan</option>
+                        @foreach ($hubungans as $hubungan)
+                        <option {{ $keluarga->hubungan == $hubungan ? 'selected' : "" }} value="{{ $hubungan }}">{{ $hubungan }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </div>
         <div class="card" style="margin-top: 1.5rem">
             <div class="card-body">

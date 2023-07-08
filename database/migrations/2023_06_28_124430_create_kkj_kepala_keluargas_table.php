@@ -19,7 +19,7 @@ class CreateKkjKepalaKeluargasTable extends Migration
             $table->string("nama");
             $table->enum("jk", ['L', 'P']);
             $table->string("tmpt_lahir");
-            $table->string("tgl_lahir");
+            $table->date("tgl_lahir");
             $table->string("pendidikan_terakhir");
             $table->string("pekerjaan");
             $table->date("baptis");

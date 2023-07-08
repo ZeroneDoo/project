@@ -6,8 +6,22 @@ use App\Models\{
     KkjKeluarga,
     KkjPasangan,
     KkjKepalaKeluarga,
+    PengantinPria,
+    PengantinWanita,
+    Pernikahan,
+    Urgent,
 };
-use Illuminate\Support\Facades\Http;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\{
+    View,
+    Mail,
+    Http,
+    Storage
+};
+use Dompdf\{
+    Dompdf,
+    Options
+};
 
 if(! function_exists("kartu_keluarga_jemaat")){
     function kartu_keluarga_jemaat($request){
@@ -32,7 +46,13 @@ if(! function_exists("kartu_keluarga_jemaat")){
             "status_menikah" => $request["status_menikah"],
             "cabang" => "Jakarta"
         ];
-        // dd($dataKkj);
+
+        // foto
+        if(isset($request['foto'])){
+            $path = Storage::disk("public")->put("kkj", $request['foto']);
+            $dataKkj['foto'] = $path;
+        }
+
         $kkj = Kkj::create($dataKkj);
 
         // kepala keluarga
@@ -50,18 +70,21 @@ if(! function_exists("kartu_keluarga_jemaat")){
         KkjKepalaKeluarga::create($dataKepalaKeluarga);
         
         // pasangan
-        $dataPasangan = [
-            "kkj_id" => $kkj->id,
-            "nama" => $request["nama_pasangan"],
-            "jk" => $request["jk_pasangan"],
-            "tmpt_lahir" => $request["tmpt_lahir_pasangan"],
-            "tgl_lahir" => $request["tgl_lahir_pasangan"],
-            "pendidikan_terakhir" => $request["pendidikan_terakhir_pasangan"],
-            "pekerjaan" => $request["pekerjaan_pasangan"],
-            "baptis" => $request["baptis_date_pasangan"],
-        ];
+        if(isset($request['pasangan'])){
+            $dataPasangan = [
+                "kkj_id" => $kkj->id,
+                "nama" => $request["nama_pasangan"],
+                "jk" => $request["jk_pasangan"],
+                "tmpt_lahir" => $request["tmpt_lahir_pasangan"],
+                "tgl_lahir" => $request["tgl_lahir_pasangan"],
+                "pendidikan_terakhir" => $request["pendidikan_terakhir_pasangan"],
+                "pekerjaan" => $request["pekerjaan_pasangan"],
+                "baptis" => $request["baptis_date_pasangan"],
+            ];
+
+            $request['status_menikah'] == "Sudah Menikah" ? KkjPasangan::create($dataPasangan) : null;
+        }
         
-        $request['status_menikah'] == "Sudah Menikah" ? KkjPasangan::create($dataPasangan) : null;
 
         // anak
         if(isset($request["anak"])){
@@ -97,11 +120,25 @@ if(! function_exists("kartu_keluarga_jemaat")){
                     "diserahkan" => $request["diserahkan_keluarga"][$i],
                     "baptis" => $request["baptis_keluarga"][$i],
                     "nikah" => $request["nikah_keluarga"][$i],
+                    'hubungan' => $request['hubungan_keluarga'][$i],
                 ];
     
                 KkjKeluarga::create($dataKeluarga);
             }
         }
+
+        // urgent
+        $dataUrgent = [
+            'kkj_id' => $kkj->id,
+            'nama' => $request['nama_urgent'],
+            'alamat' => $request['alamat_urgent'],
+            'telp' => $request['telp_urgent'],
+            'hubungan' => $request['hubungan_urgent'],
+        ];
+
+        Urgent::create($dataUrgent);
+
+        return Kkj::with('kkj_kepala_keluarga','kkj_pasangan', 'kkj_anak', 'kkj_keluarga')->find($kkj->id);
     }
 }
 
@@ -126,6 +163,12 @@ if(! function_exists("edit_kartu_kerluarga_jemaat")){
             "status_menikah" => $req["status_menikah"],
         ];
 
+        // foto
+        if(isset($req['foto'])){
+            $path = Storage::disk("public")->put("kkj", $req['foto']);
+            $dataKkj['foto'] = $path;
+        }
+
         $kkj->update($dataKkj);
         
         // kepala keluarga
@@ -143,18 +186,20 @@ if(! function_exists("edit_kartu_kerluarga_jemaat")){
         $kkjKepalaKeluarga->update($dataKepalaKeluarga);
 
         // pasangan
-        $kkjPasangan = KkjPasangan::where("kkj_id", $idkkj)->first();
+        if(isset($req['pasangan'])){
+            $kkjPasangan = KkjPasangan::where("kkj_id", $idkkj)->first();
 
-        $dataPasangan = [
-            "nama" => $req["nama_pasangan"],
-            "jk" => $req["jk_pasangan"],
-            "tmpt_lahir" => $req["tmpt_lahir_pasangan"],
-            "tgl_lahir" => $req["tgl_lahir_pasangan"],
-            "pendidikan_terakhir" => $req["pendidikan_terakhir_pasangan"],
-            "pekerjaan" => $req["pekerjaan_pasangan"],
-            "baptis" => $req["baptis_date_pasangan"],
-        ];
-        $req['status_menikah'] == "Cerai" ? $kkjPasangan->delete() : $kkjPasangan->update($dataPasangan);
+            $dataPasangan = [
+                "nama" => $req["nama_pasangan"],
+                "jk" => $req["jk_pasangan"],
+                "tmpt_lahir" => $req["tmpt_lahir_pasangan"],
+                "tgl_lahir" => $req["tgl_lahir_pasangan"],
+                "pendidikan_terakhir" => $req["pendidikan_terakhir_pasangan"],
+                "pekerjaan" => $req["pekerjaan_pasangan"],
+                "baptis" => $req["baptis_date_pasangan"],
+            ];
+            $req['status_menikah'] == "Cerai" ? $kkjPasangan->delete() : $kkjPasangan->update($dataPasangan);
+        }
 
         // anak create
         if(isset($req["anak"])){
@@ -230,11 +275,25 @@ if(! function_exists("edit_kartu_kerluarga_jemaat")){
                     "diserahkan" => $req["diserahkan_keluarga_edit"][$i],
                     "baptis" => $req["baptis_keluarga_edit"][$i],
                     "nikah" => $req["nikah_keluarga_edit"][$i],
+                    "hubungan" => $req["hubungan_keluarga_edit"][$i],
                 ];
                 
                 $kkjKeluarga->update($dataKeluarga);
             }
         }
+
+        // urgent
+        $urgent = Urgent::where('kkj_id', $kkj->id)->first();
+        $dataUrgent = [
+            'nama' => $req['nama_urgent'],
+            'alamat' => $req['alamat_urgent'],
+            'telp' => $req['telp_urgent'],
+            'hubungan' => $req['hubungan_urgent'],
+        ];
+
+        $urgent->update($dataUrgent);
+
+        return Kkj::with('kkj_kepala_keluarga','kkj_pasangan', 'kkj_anak', 'kkj_keluarga')->find($idkkj);
     }
 }
 
@@ -263,11 +322,184 @@ if(! function_exists("generateCode")){
     function generateCode(){
         $prefix = "KKJ";
         $length = 7;
+        $date = Carbon::now('Asia/Jakarta')->format('m-y');
         // $code = $prefix . substr(uniqid(), 0, $length);
         
         $uniqueid = crc32(uniqid());
-        $code = $prefix . abs($uniqueid);
+        $code = abs($uniqueid)."/$prefix/11H001/$date" ;
 
         return $code;
+    }
+}
+
+if(! function_exists('send_pdf_email')){
+    function send_pdf_email($data, $email, $file){
+        try {
+            // setup pdf
+            $options = new Options();
+            $options->set('defaultFont', 'sans-serif');
+            $dompdf = new Dompdf($options);
+            $file == "kkj" ? $dompdf->setPaper('A3', 'landscape') : $dompdf->setPaper('A4', 'potrait');
+
+            $html = View::make("pdf.$file.$file", ['data' => $data])->render();
+            $dompdf->loadHtml($html);
+            $dompdf->render();
+
+            // output pdf
+            $pdfOutput = $dompdf->output();
+
+            if($file == "kkj") $namafile = 'Kartu Keluarga Jemaat';
+            if($file == "baptis") $namafile = 'Baptis';
+            if($file == "penyerahan") $namafile = 'Penyerahan';
+            if($file == "pernikahan") $namafile = 'Pernikahan';
+
+            // menyimpan output sementara di temp
+            $pdfPath = sys_get_temp_dir() . "/Data $namafile.pdf";
+            file_put_contents($pdfPath, $pdfOutput);
+            
+            // data yang akan di kirim ke attach email
+            $dataPdf = [
+                'pdfPath' => $pdfPath,
+                'imagePath' => public_path('storage/'. $data->foto)
+            ];
+
+            Mail::send('emails.'.$file, ['dataPdf'=>$dataPdf, 'data'=> $data], function ($message) use ($pdfPath, $email, $namafile) {
+                $message->to($email)
+                    ->subject("Data $namafile Gereja Bethel Indonesia")
+                    ->attach($pdfPath);
+            });
+        } catch (\Throwable $th) {
+            return back()->with('msg_info', 'Info pesan email tidak terkirim');
+        }
+    }
+}
+
+if(! function_exists('create_form_pernikahan')){
+    function create_form_pernikahan($req){
+        $data_pria = [
+            "nama" => $req['nama_pria'],
+            "waktu_baptis" => Carbon::parse($req['waktu_baptis_pria'], "Asia/Jakarta"),
+            "gereja" => $req['gereja_pria'],
+            "no_kkj" => $req['no_kkj_pria'],
+            "no_ktp" => $req['no_ktp_pria'],
+            "tmpt_lahir" => $req['tmpt_lahir_pria'],
+            "tgl_lahir" => Carbon::parse($req['tgl_lahir_pria'], 'Asia/Jakarta'),
+            "status_menikah" => $req['status_pernikahan_pria'],
+            "alamat" => $req['alamat_pria'],
+            "no_telp" => $req['no_telp_pria'],
+            "nama_ayah" => $req['nama_ayah_pria'],
+            "nama_ibu" => $req['nama_ibu_pria'],
+        ];
+        if(isset($req['foto_pria'])){
+            $path = Storage::disk('public')->put('pernikahan', $req['foto_pria']);
+            $data_pria['foto'] = $path;
+        }
+        $pria = PengantinPria::create($data_pria);
+
+        // pengantin wanita
+        $data_wanita = [
+            "nama" => $req['nama_wanita'],
+            "waktu_baptis" => Carbon::parse($req['waktu_baptis_wanita'], "Asia/Jakarta"),
+            "gereja" => $req['gereja_wanita'],
+            "no_kkj" => $req['no_kkj_wanita'],
+            "no_ktp" => $req['no_ktp_wanita'],
+            "tmpt_lahir" => $req['tmpt_lahir_wanita'],
+            "tgl_lahir" => Carbon::parse($req['tgl_lahir_wanita'], 'Asia/Jakarta'),
+            "status_menikah" => $req['status_pernikahan_wanita'],
+            "alamat" => $req['alamat_wanita'],
+            "no_telp" => $req['no_telp_wanita'],
+            "nama_ayah" => $req['nama_ayah_wanita'],
+            "nama_ibu" => $req['nama_ibu_wanita'],
+        ];
+        if(isset($req['foto_wanita'])){
+            $path = Storage::disk('public')->put('pernikahan', $req['foto_wanita']);
+            $data_wanita['foto'] = $path;
+        }
+        $wanita = PengantinWanita::create($data_wanita);
+
+        $data = [
+            "pengantin_pria_id" => $pria->id,
+            "pengantin_wanita_id" => $wanita->id,
+            'email' => $req['email'],
+            "waktu_pernikahan" => $req['waktu_pernikahan'],
+            "tmpt_pernikahan" => $req['tmpt_pernikahan'],
+            "alamat_setelah_menikah" => $req['alamat_setelah_menikah'],
+        ];
+        $dataPernikahan = Pernikahan::create($data);
+
+        if($req['hubungan'] =="anak"){
+            $anggotakeluarga = KkjAnak::find($req['id']);
+        }else if($req['hubungan'] == "keluarga"){
+            $anggotakeluarga = KkjKeluarga::find($req['id']);
+        }
+
+        $anggotakeluarga->update(['nikah' => "Y"]);
+
+        return Pernikahan::with('pengantin_pria', 'pengantin_wanita')->find($dataPernikahan->id);
+    }
+}
+
+if(! function_exists('edit_form_pernikahan')){
+    function edit_form_pernikahan($req, $id){
+        $pria = PengantinPria::find($req['pengantin_pria_id']);
+        $data_pria = [
+            "nama" => $req['nama_pria'],
+            "waktu_baptis" => Carbon::parse($req['waktu_baptis_pria'], "Asia/Jakarta"),
+            "gereja" => $req['gereja_pria'],
+            "no_kkj" => $req['no_kkj_pria'],
+            "no_ktp" => $req['no_ktp_pria'],
+            "tmpt_lahir" => $req['tmpt_lahir_pria'],
+            "tgl_lahir" => Carbon::parse($req['tgl_lahir_pria'], 'Asia/Jakarta'),
+            "status_menikah" => $req['status_pernikahan_pria'],
+            "alamat" => $req['alamat_pria'],
+            "no_telp" => $req['no_telp_pria'],
+            "nama_ayah" => $req['nama_ayah_pria'],
+            "nama_ibu" => $req['nama_ibu_pria'],
+        ];
+        if(isset($req['foto_pria'])){
+            if(Storage::disk('public')->exists("$pria->foto")){
+                Storage::disk('public')->delete("$pria->foto");
+            }
+            $path = Storage::disk('public')->put('pernikahan', $req['foto_pria']);
+            $data_pria['foto'] = $path;
+        }
+        $pria ->update($data_pria);
+
+        // pengantin wanita
+        $wanita = PengantinWanita::find($req['pengantin_wanita_id']);
+        $data_wanita = [
+            "nama" => $req['nama_wanita'],
+            "waktu_baptis" => Carbon::parse($req['waktu_baptis_wanita'], "Asia/Jakarta"),
+            "gereja" => $req['gereja_wanita'],
+            "no_kkj" => $req['no_kkj_wanita'],
+            "no_ktp" => $req['no_ktp_wanita'],
+            "tmpt_lahir" => $req['tmpt_lahir_wanita'],
+            "tgl_lahir" => Carbon::parse($req['tgl_lahir_wanita'], 'Asia/Jakarta'),
+            "status_menikah" => $req['status_pernikahan_wanita'],
+            "alamat" => $req['alamat_wanita'],
+            "no_telp" => $req['no_telp_wanita'],
+            "nama_ayah" => $req['nama_ayah_wanita'],
+            "nama_ibu" => $req['nama_ibu_wanita'],
+        ];
+        if(isset($req['foto_wanita'])){
+            if(Storage::disk('public')->exists("$wanita->foto")){
+                Storage::disk('public')->delete("$wanita->foto");
+            }
+            $path = Storage::disk('public')->put('pernikahan', $req['foto_wanita']);
+            $data_wanita['foto'] = $path;
+        }
+        $wanita->update($data_wanita);
+
+        // data pernikahan
+        $dataPernikahan = Pernikahan::find($id);
+        $data = [
+            'email' => $req['email'],
+            "waktu_pernikahan" => $req['waktu_pernikahan'],
+            "tmpt_pernikahan" => $req['tmpt_pernikahan'],
+            "alamat_setelah_menikah" => $req['alamat_setelah_menikah'],
+        ];
+        $dataPernikahan->update($data);
+
+        return Pernikahan::with('pengantin_pria', 'pengantin_wanita')->find($id);
     }
 }

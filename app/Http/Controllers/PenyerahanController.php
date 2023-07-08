@@ -8,12 +8,14 @@ use App\Http\Requests\Penyerahan\{
 };
 use App\Models\Penyerahan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PenyerahanController extends Controller
 {
     public function index()
     {
-        return view("penyerahan.index");
+        $datas = Penyerahan::with('kkj_anak', 'kkj_keluarga')->paginate(4);
+        return view("penyerahan.index", compact('datas'));
     }
 
     public function create()
@@ -37,27 +39,44 @@ class PenyerahanController extends Controller
         //
     }
 
-    public function edit(Penyerahan $penyerahan)
+    public function edit($id)
     {
-        $data = $penyerahan;
+        $data = Penyerahan::with('kkj_anak.kkj', 'kkj_anak.kkj_kepala_keluarga', 'kkj_anak.kkj_pasangan')->find($id);
         return view('penyerahan.form', compact('data'));
     }
 
-    public function update(UpdateRequest $request, Penyerahan $penyerahan)
+    public function update(UpdateRequest $request, $id)
     {
         try {
-            $data = []; 
+            $penyerahan = Penyerahan::find($id);
+            $data = [
+                'waktu' => $request->waktu,
+                'pendeta' => $request->pendeta,
+            ]; 
 
-            return redirect()->route("baptis.index")->with("msg_success", "Berhasil mengubah formulir baptis");
+            if($request->foto){
+                $path = Storage::disk('public')->put('baptis', $request->foto);
+                $data['foto'] = $path;
+
+                if(Storage::disk('public')->exists("$penyerahan->foto")){
+                    Storage::disk('public')->delete("$penyerahan->foto");
+                }
+            }
+
+            $penyerahan->update($data);
+
+            return redirect()->route("penyerahan.index")->with("msg_success", "Berhasil mengubah formulir penyerahan");
         } catch (\Throwable $th) {
-            return redirect()->route("baptis.index")->with("msg_error", "Gagal mengubah formulir baptis");
+            return redirect()->route("penyerahan.index")->with("msg_error", "Gagal mengubah formulir penyerahan");
         }
     }
 
-    public function destroy(Penyerahan $penyerahan)
+    public function destroy($id)
     {
+        $penyerahan = Penyerahan::with('kkj_anak')->find($id);
         if(!$penyerahan) return abort(403, "TIDAK ADA DATA TERSEBUT");
 
+        $penyerahan->kkj_anak->update(['diserahkan' => 'T']);
         $penyerahan->delete();
 
         return redirect()->route("penyerahan.index")->with("msg_success", "Berhasil menghapus formulir penyerahan");

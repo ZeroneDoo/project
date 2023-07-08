@@ -8,12 +8,14 @@ use App\Http\Requests\Baptis\{
 };
 use App\Models\Baptis;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BaptisController extends Controller
 {
     public function index()
     {
-        return view("baptis.index");
+        $datas = Baptis::with('kkj_anak', 'kkj_keluarga')->paginate(4);
+        return view("baptis.index", compact('datas'));
     }
 
     public function create()
@@ -37,16 +39,33 @@ class BaptisController extends Controller
         //
     }
 
-    public function edit(Baptis $baptis)
+    public function edit($id)
     {
-        $data = $baptis;
-        return view("bapatis.form", compact("data"));
+        $data = Baptis::with('kkj_anak.kkj_kepala_keluarga', 'kkj_anak.kkj', 'kkj_anak.kkj_pasangan')->find($id);
+        return view("baptis.form", compact("data"));
     }
 
-    public function update(UpdateRequest $request, Baptis $baptis)
+    public function update(UpdateRequest $request, $id)
     {
         try {
-            $data = []; 
+            $baptis = Baptis::find($id);
+            
+            $data = [
+                'waktu' => $request->waktu,
+                'pendeta' => $request->pendeta,
+            ]; 
+            
+            if($request->foto){
+                $path = Storage::disk('public')->put('baptis', $request->foto);
+                $data['foto'] = $path;
+                
+                if(Storage::disk('public')->exists("$baptis->foto")){
+                    Storage::disk('public')->delete("$baptis->foto");
+                }
+            }
+            
+            // dd($data);
+            $baptis->update($data);
 
             return redirect()->route("baptis.index")->with("msg_success", "Berhasil mengubah formulir baptis");
         } catch (\Throwable $th) {
@@ -54,10 +73,12 @@ class BaptisController extends Controller
         }
     }
 
-    public function destroy(Baptis $baptis)
+    public function destroy($id)
     {
+        $baptis = Baptis::with('kkj_anak')->find($id);
         if(!$baptis) return abort(403, "TIDAK ADA DATA TERSEBUT");
 
+        $baptis->kkj_anak->update(['baptis' => 'T']);
         $baptis->delete();
 
         return redirect()->route("baptis.index")->with("msg_success", "Berhasil menghapus formulir baptis");
