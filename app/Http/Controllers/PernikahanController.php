@@ -85,14 +85,18 @@ class PernikahanController extends Controller
 
     public function getKandidat(Request $request)
     {
-        if($request->hubungan == "anak"){
-            $data = KkjAnak::with('kkj_pasangan', 'kkj_kepala_keluarga', 'kkj', 'baptiss')->find($request->id);
-        }else if($request->hubungan == "keluarga"){
-            $data = KkjKeluarga::with('kkj_pasangan', 'kkj_kepala_keluarga', 'kkj', 'baptiss')->find($request->id);
+        try {
+            if($request->hubungan == "anak"){
+                $data = KkjAnak::with('kkj_pasangan', 'kkj_kepala_keluarga', 'kkj', 'baptiss')->find($request->id);
+            }else if($request->hubungan == "keluarga"){
+                $data = KkjKeluarga::with('kkj_pasangan', 'kkj_kepala_keluarga', 'kkj', 'baptiss')->find($request->id);
+            }
+    
+            $data->baptiss->waktu_format = Carbon::parse($data->baptiss->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i');
+            $data->tgl_lahir_format = Carbon::parse($data->tgl_lahir, 'Asia/Jakarta')->translatedFormat('d F Y');
+            return $data;
+        } catch (\Throwable $th) {
+            return "info";
         }
-
-        $data->baptiss->waktu_format = Carbon::parse($data->baptiss->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i');
-        $data->tgl_lahir_format = Carbon::parse($data->tgl_lahir, 'Asia/Jakarta')->translatedFormat('d F Y');
-        return $data;
     }
 }

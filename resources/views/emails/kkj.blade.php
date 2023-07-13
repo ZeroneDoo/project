@@ -60,7 +60,7 @@
                             <label for="nama_kepala_keluarga">Nama Lengkap : {{ $data->kkj_kepala_keluarga->nama }}</label>
                         </div>
                         <div class="div">
-                            <label for="nama_kepala_keluarga">Jenis Kelamin : {{ $data->kkj_kepala_keluarga->jk }}</label>
+                            <label for="nama_kepala_keluarga">Jenis Kelamin : {{  $data->kkj_kepala_keluarga->jk == "L"? "Laki Laki":"Perempuan" }}</label>
                         </div>
                         <div>
                             <label for="tmpt_lahir">Tempat Lahir : {{ $data->kkj_kepala_keluarga->tmpt_lahir }}</label>
@@ -77,11 +77,6 @@
                         <div>
                             <label for="baptis_date">Baptis Selam : {{ $data->kkj_kepala_keluarga->baptis }}</label>
                         </div>
-                        {{-- <div>
-                            <label for="baptis_date">Foto Kepala Keluarga *</label>
-                            <input disabled type="file" required class="form-control" name="baptis_date"
-                                style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="baptis_date">
-                        </div> --}}
                     </div>
                 </div>
             </div>
@@ -95,7 +90,7 @@
                             <label for="nama_pasangan">Nama Lengkap : {{ $data->kkj_pasangan->nama }}</label>
                         </div>
                         <div>
-                            <label for="">Jenis Kelamin : {{ $data->kkj_pasangan->jk }}</label>
+                            <label for="">Jenis Kelamin : {{  $data->kkj_pasangan->jk == "L"? "Laki Laki":"Perempuan" }}</label>
                         </div>
                         </div>
                         <div>
@@ -131,6 +126,11 @@
             </div>
         </div>
         <div class="row g-4" style="margin-bottom: 0.75rem;" id="card_anak">
+            @if (count($data->kkj_anak) <= 0)
+            <div>
+                <label>-</label>
+            </div>
+            @endif
             @if (isset($data))
                 @foreach ($data->kkj_anak as $i => $anak)
                 <div class="col-sm-6">
@@ -141,7 +141,7 @@
                                 <label for="nama_anak_edit">Nama Lengkap : {{ $anak->nama }}</label>
                             </div>
                             <div>
-                                <label for="nama_anak_edit">Jenis Kelamin : {{ $anak->jk }}</label>
+                                <label for="nama_anak_edit">Jenis Kelamin : {{  $anak->jk == "L"? "Laki Laki":"Perempuan" }}</label>
                             </div>
                             <div>
                                 <label for="tmpt_lahir_anak_edit">Tempat Lahir : {{ $anak->tmpt_lahir }}</label>
@@ -185,6 +185,11 @@
         <div class="row g-4" id="card_keluarga">
             {{-- list --}}
             {{-- ajax --}}
+            @if (count($data->kkj_keluarga) <= 0)
+            <div>
+                <label>-</label>
+            </div>
+            @endif
             @if (isset($data))
                 @foreach ($data->kkj_keluarga as $i => $keluarga)
                 <div class="col-sm-6">
@@ -195,7 +200,7 @@
                                 <label>Nama Lengkap : {{ $keluarga->nama }}</label>
                             </div>
                             <div>
-                                <label>Jenis Kelamin : {{ $keluarga->jk }}</label>
+                                <label>Jenis Kelamin : {{  $keluarga->jk == "L"? "Laki Laki":"Perempuan" }}</label>
                             </div>
                             <div>
                                 <label>Tempat Lahir : {{ $keluarga->tmpt_lahir }}</label>

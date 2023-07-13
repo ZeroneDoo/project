@@ -40,13 +40,13 @@ class PenyerahanBaptisController extends Controller
     {
         try {
             $data = [
-                'kkj_anak_id' => $request->hubungan =="anak" ? $request->id : null,
+                'kkj_anak_id' => $request->hubungan == "anak" ? $request->id : null,
                 'kkj_keluarga_id' => $request->hubungan =="keluarga" ? $request->id : null,
                 'waktu' => Carbon::parse($request->waktu, 'Asia/Jakarta'),
                 'pendeta' => $request->pendeta,
             ];
             
-            if(!isset($request->baptis) && !isset($request->penyerahan)) return back()->with("msg_error", "Gagal membuat jadwal penyerahan/baptis");
+            if(!isset($request->baptis) && !isset($request->penyerahan)) return back()->with("msg_error", "Gagal membuat data penyerahan/baptis");
             
             if($request->baptis == "on"){
                 // foto

@@ -1,5 +1,6 @@
 class Component {
     static dataPengantin;
+    static num_keluarga = 1;
 
     static getProvinsi = async (prev = "") => {
         await $.ajax({
@@ -206,13 +207,13 @@ class Component {
     
     static tambahKeluarga = ({hubungan: hubungans}) => {
         let values = JSON.parse(hubungans)
-        let num = 1;
+        console.log(Component.num_keluarga)
         $("#card_keluarga").append(`
-        <div class="col-sm-6" id="card-keluarga-${num}" style='margin-bottom:1rem;'>
+        <div class="col-sm-6" id="card-keluarga-${Component.num_keluarga}" style='margin-bottom:1rem;'>
         <input type="hidden" name="keluarga[]" required value="keluarga" id="keluarga">
             <div class="card">
                 <div style="display: flex; justify-content: flex-end; padding: 0.75rem">
-                    <button class="btn btn-danger" type="button" onclick="Component.hapusKeluarga('card-keluarga-${num}')">x</button>
+                    <button class="btn btn-danger" type="button" onclick="Component.hapusKeluarga('card-keluarga-${Component.num_keluarga}')">x</button>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
@@ -277,16 +278,34 @@ class Component {
                     </div>
                     <div class="form-group">
                         <label for="">Hubungan *</label>
-                        <select name="hubungan_keluarga[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="hubungan_keluarga">
+                        <select name="hubungan_keluarga[]" onchange="Component.hubunganInput(this, '#hubungan-input-${Component.num_keluarga}', 'hubungan_keluarga[]x')"  style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="hubungan_keluarga">
                             <option value="" hidden selected>Hubungan</option>
                             ${values.map(hubungan => `<option value="${hubungan}">${hubungan}</option>`)}
+                            <option value="">Lainnya</option>
                         </select>
+                        <div id="hubungan-input-${Component.num_keluarga}">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         `)
-        num++
+        Component.num_keluarga++
+    }
+
+    static hubunganInput = (select, id_input, name) => {
+        let value = $(select).val()
+        let id = $(id_input)
+
+        if(value === "") {
+            console.log(value)
+            $(id).html(`
+            <label for="">Hubungan lainnya</label>
+            <input required class="form-control" name="${name}">
+            `)
+        }else {
+            $(id).html(``)
+        }
     }
 
     static hapusKeluarga = (id) => {
@@ -374,7 +393,7 @@ class Component {
                         </div>
                         <div class="form-group">
                             <label for="">Nama Ibu</label>
-                            <input type="text" disabled class="form-control" value="${res.kkj_pasangan.nama}">
+                            <input type="text" disabled class="form-control" value="${res.kkj_pasangan ?res.kkj_pasangan.nama : 'Tidak Ada'}">
                         </div>`
                     )
 
@@ -415,6 +434,12 @@ class Component {
             },
             success: function (res) {
                 if(res){
+                    if(res == 'info') {
+                        $("#card_pria").prop("hidden", true)
+                        $("#card_wanita").prop("hidden", true)
+                        Component.showAlert("Pengantin tersebut belum di baptis", res)
+                        return
+                    }
                     Component.dataPengantin = res
                     Component.jkPengantin(res.jk)
                     $("#card_pria").prop("hidden", false)
@@ -428,7 +453,6 @@ class Component {
         // let value = $(val).val()
         let value = val
         let res = Component.dataPengantin
-        console.log(res)
 
         if(value == 'L'){
             // reset wanita
@@ -549,7 +573,7 @@ class Component {
             </div>
             <div class="form-group">
                 <label for="nama_ibu_pria">Nama Ibu</label>
-                <input class="form-control" name="nama_ibu_pria" required value="${res.kkj_pasangan.nama}" id="nama_ibu_pria">
+                <input class="form-control" name="nama_ibu_pria" required value="${res.kkj_pasangan ? res.kkj_pasangan.nama : 'Tidak Ada'}" id="nama_ibu_pria">
             </div>
             <div class="form-group">
                 <label for="">Foto Pria</label>
@@ -675,7 +699,7 @@ class Component {
             </div>
             <div class="form-group">
                 <label for="nama_ibu_wanita">Nama Ibu</label>
-                <input class="form-control" name="nama_ibu_wanita" required value="${res.kkj_pasangan.nama}" id="nama_ibu_wanita">
+                <input class="form-control" name="nama_ibu_wanita" required value="${res.kkj_pasangan ? res.kkj_pasangan.nama : 'Tidak Ada'}" id="nama_ibu_wanita">
             </div>
             <div class="form-group">
                 <label for="">Foto Wanita</label>

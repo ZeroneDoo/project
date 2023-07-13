@@ -364,7 +364,7 @@
             {{-- list --}}
             {{-- ajax --}}
             @if (isset($data))
-                @foreach ($data->kkj_keluarga as $keluarga)
+                @foreach ($data->kkj_keluarga as $i => $keluarga)
                 <div class="col-sm-6" style="margin-bottom: 1rem">
                     <input required type="hidden" name="id_keluarga[]" value="{{ $keluarga->id }}" id="id_keluarga">
                         <div class="card">
@@ -436,12 +436,21 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="">Hubungan *</label>
-                                    <select name="hubungan_keluarga_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="hubungan_keluarga_edit">
+                                    <select name="hubungan_keluarga_edit[]" onchange="Component.hubunganInput(this, '#hubungan-input-edit-{{ $i }}', 'hubungan_keluarga_edit[]')" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="hubungan_keluarga_edit">
                                         <option value="" hidden selected>Hubungan</option>
                                         @foreach ($hubungans as $hubungan)
                                         <option {{ $keluarga->hubungan == $hubungan ? 'selected' : "" }} value="{{ $hubungan }}">{{ $hubungan }}</option>
                                         @endforeach
+                                        <option value="" {{ !in_array($keluarga->hubungan, $hubungans) ? 'selected' : ''}}>Lainnya</option>
                                     </select>
+                                    @if (isset($data))
+                                    <div id="hubungan-input-edit-{{ $i }}">
+                                        @if ( !in_array($keluarga->hubungan, $hubungans))
+                                        <label for="">Hubungan lainnya</label>
+                                        <input required class="form-control" value="{{$keluarga->hubungan}}"  name="hubungan_keluarga_edit[]">
+                                        @endif
+                                    </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -471,12 +480,20 @@
                 </div>
                 <div class="form-group">
                     <label for="">Hubungan *</label>
-                    <select name="hubungan_urgent" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="hubungan_urgent">
-                        <option value="" hidden selected>Hubungan</option>
+                    <select name="hubungan_urgent" style="margin-top: 0.75rem; margin-bottom: 0.75rem" onchange="Component.hubunganInput(this, '#hubungan-urgent-input', 'hubungan_urgent')" class="form-select" id="hubungan_urgent">
+                        <option value="" selected hidden>Hubungan</option>
                         @foreach ($hubungans as $hubungan)
-                        <option {{ $keluarga->hubungan == $hubungan ? 'selected' : "" }} value="{{ $hubungan }}">{{ $hubungan }}</option>
+                        <option {{ isset($data) ? ($data->urgent->hubungan == $hubungan ? 'selected' : "") : '' }} value="{{ $hubungan }}">{{ $hubungan }}</option>
                         @endforeach
+                        <option value="" {{ isset($data) ? (!in_array($data->urgent->hubungan, $hubungans) ? 'selected' : '') : '' }}>Lainnya</option>
                     </select>
+                    {{-- mengecek hubungan jika tidak ada di select --}}
+                    <div id="hubungan-urgent-input">
+                        @if (isset($data) && !in_array($data->urgent->hubungan, $hubungans))
+                        <label for="">Hubungan lainnya</label>
+                        <input required class="form-control" value="{{ $data->urgent->hubungan }}"  name="hubungan_urgent">
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>

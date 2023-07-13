@@ -108,9 +108,12 @@ if(! function_exists("kartu_keluarga_jemaat")){
 
         // keluarga
         if(isset($request["keluarga"])){
+            foreach($request['hubungan_keluarga'] as $hubungan){
+                if($hubungan != null) $request['hubungan_keluargas'][] = $hubungan;
+            }
             foreach ($request["keluarga"] as $i => $keluarga) {
                 $dataKeluarga = [
-                    "kkj_id" => $kkj->id,
+                    "kkj_id" => $kkj->id,   
                     "nama" => $request["nama_keluarga"][$i],
                     "jk" => $request["jk_keluarga"][$i],
                     "tmpt_lahir" => $request["tmpt_lahir_keluarga"][$i],
@@ -120,7 +123,7 @@ if(! function_exists("kartu_keluarga_jemaat")){
                     "diserahkan" => $request["diserahkan_keluarga"][$i],
                     "baptis" => $request["baptis_keluarga"][$i],
                     "nikah" => $request["nikah_keluarga"][$i],
-                    'hubungan' => $request['hubungan_keluarga'][$i],
+                    'hubungan' => $request['hubungan_keluargas'][$i],
                 ];
     
                 KkjKeluarga::create($dataKeluarga);
@@ -244,6 +247,9 @@ if(! function_exists("edit_kartu_kerluarga_jemaat")){
         // keluarga create
         if(isset($req["keluarga"])){
             foreach ($req["keluarga"] as $i => $dumpkeluarga) {
+                foreach($req['hubungan_keluarga'] as $hubungan){
+                    if($hubungan != null) $req['hubungan_keluargas'][] = $hubungan;
+                }
                 $dataKeluarga = [
                     "kkj_id" => $idkkj,
                     "nama" => $req["nama_keluarga"][$i],
@@ -255,6 +261,7 @@ if(! function_exists("edit_kartu_kerluarga_jemaat")){
                     "diserahkan" => $req["diserahkan_keluarga"][$i],
                     "baptis" => $req["baptis_keluarga"][$i],
                     "nikah" => $req["nikah_keluarga"][$i],
+                    "hubungan" => $req["hubungan_keluargas"][$i],
                 ];
                 
                 KkjKeluarga::create($dataKeluarga);
@@ -263,6 +270,9 @@ if(! function_exists("edit_kartu_kerluarga_jemaat")){
         // keluarga edit
         if(isset($req["id_keluarga"])){
             foreach ($req["id_keluarga"] as $i => $keluarga) {
+                foreach($req['hubungan_keluarga_edit'] as $hubungan){
+                    if($hubungan != null) $req['hubungan_keluargas_edit'][] = $hubungan;
+                }
                 $kkjKeluarga = KkjKeluarga::find($keluarga);
                 
                 $dataKeluarga = [
@@ -275,7 +285,7 @@ if(! function_exists("edit_kartu_kerluarga_jemaat")){
                     "diserahkan" => $req["diserahkan_keluarga_edit"][$i],
                     "baptis" => $req["baptis_keluarga_edit"][$i],
                     "nikah" => $req["nikah_keluarga_edit"][$i],
-                    "hubungan" => $req["hubungan_keluarga_edit"][$i],
+                    "hubungan" => $req["hubungan_keluargas_edit"][$i],
                 ];
                 
                 $kkjKeluarga->update($dataKeluarga);

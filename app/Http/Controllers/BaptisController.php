@@ -42,7 +42,8 @@ class BaptisController extends Controller
     public function edit($id)
     {
         $data = Baptis::with('kkj_anak.kkj_kepala_keluarga', 'kkj_anak.kkj', 'kkj_anak.kkj_pasangan')->find($id);
-        return view("baptis.form", compact("data"));
+        $datarelasi = $data->kkj_anak ? $data->kkj_anak : $data->kkj_keluarga;
+        return view("baptis.form", compact("data", 'datarelasi'));
     }
 
     public function update(UpdateRequest $request, $id)

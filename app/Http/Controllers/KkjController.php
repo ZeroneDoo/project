@@ -28,7 +28,7 @@ class KkjController extends Controller
     {
         $status_menikah = ["Sudah Menikah", "Belum Menikah", "Cerai"];
         $jenjangs = ['SD', 'SMP', 'SMA/Sederajat', 'D1', 'D2', "D3", 'S1', 'S2', "S3"];
-        $hubungans = ['Saudara', "Paman", "Bibi", "Kakek", "Nenek"];
+        $hubungans = ["Ayah", "Ibu", "Kakak", "Adik", "Suami", "Istri", "Keponakan", "Sepupu"];
         return view("kkj.form", compact("status_menikah", 'jenjangs', 'hubungans'));
     }
 
@@ -51,10 +51,10 @@ class KkjController extends Controller
 
     public function edit(Kkj $kkj)
     {
-        $data = Kkj::with(['kkj_kepala_keluarga', 'kkj_pasangan', 'kkj_anak', 'kkj_keluarga'])->find($kkj->id);
+        $data = Kkj::with(['kkj_kepala_keluarga', 'kkj_pasangan', 'kkj_anak', 'kkj_keluarga', 'urgent'])->find($kkj->id);
         $status_menikah = ["Sudah Menikah", "Belum Menikah", "Cerai"];
         $jenjangs = ['SD', 'SMP', 'SMA/Sederajat', 'D1', 'D2', "D3", 'S1', 'S2', "S3"];
-        $hubungans = ['Saudara', "Paman", "Bibi", "Kakek", "Nenek"];
+        $hubungans = ["Ayah", "Ibu", "Kakak", "Adik", "Suami", "Istri", "Keponakan", "Sepupu"];
         return view("kkj.form", compact("data", "status_menikah", 'jenjangs', 'hubungans'));
     }
 

@@ -28,7 +28,7 @@
                 <label for="">Nama Ayah : {{  $data->kkj_kepala_keluarga->nama }}</label>
             </div>
             <div class="form-group">
-                <label for="">Nama Ibu : {{  $data->kkj_pasangan->nama }}</label>
+                <label for="">Nama Ibu : {{  $data->kkj_pasangan ? $data->kkj_pasangan->nama : 'Tidak Ada' }}</label>
             </div>
         </div>
         {{-- /data kandidat --}}
