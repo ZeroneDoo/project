@@ -27,6 +27,7 @@ class CreateKkjKeluargasTable extends Migration
             $table->enum("nikah", ['Y', "T"]);
             $table->string('hubungan');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

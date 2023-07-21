@@ -24,6 +24,7 @@ class CreateKkjKepalaKeluargasTable extends Migration
             $table->string("pekerjaan");
             $table->date("baptis");
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

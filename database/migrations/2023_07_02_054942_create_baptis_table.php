@@ -16,6 +16,7 @@ class CreateBaptisTable extends Migration
             $table->string('pendeta');
             $table->string('foto')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

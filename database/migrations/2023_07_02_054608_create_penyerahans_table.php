@@ -16,6 +16,7 @@ class CreatePenyerahansTable extends Migration
             $table->string('pendeta');
             $table->string('foto');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

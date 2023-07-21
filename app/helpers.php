@@ -6,6 +6,7 @@ use App\Models\{
     KkjKeluarga,
     KkjPasangan,
     KkjKepalaKeluarga,
+    Pengantin,
     PengantinPria,
     PengantinWanita,
     Pernikahan,
@@ -399,12 +400,13 @@ if(! function_exists('create_form_pernikahan')){
             "no_telp" => $req['no_telp_pria'],
             "nama_ayah" => $req['nama_ayah_pria'],
             "nama_ibu" => $req['nama_ibu_pria'],
+            "jk_pengantin" => "Pria"
         ];
         if(isset($req['foto_pria'])){
             $path = Storage::disk('public')->put('pernikahan', $req['foto_pria']);
             $data_pria['foto'] = $path;
         }
-        $pria = PengantinPria::create($data_pria);
+        $pria = Pengantin::create($data_pria);
 
         // pengantin wanita
         $data_wanita = [
@@ -420,12 +422,13 @@ if(! function_exists('create_form_pernikahan')){
             "no_telp" => $req['no_telp_wanita'],
             "nama_ayah" => $req['nama_ayah_wanita'],
             "nama_ibu" => $req['nama_ibu_wanita'],
+            "jk_pengantin" => "Wanita"
         ];
         if(isset($req['foto_wanita'])){
             $path = Storage::disk('public')->put('pernikahan', $req['foto_wanita']);
             $data_wanita['foto'] = $path;
         }
-        $wanita = PengantinWanita::create($data_wanita);
+        $wanita = Pengantin::create($data_wanita);
 
         $data = [
             "pengantin_pria_id" => $pria->id,
@@ -445,13 +448,13 @@ if(! function_exists('create_form_pernikahan')){
 
         $anggotakeluarga->update(['nikah' => "Y"]);
 
-        return Pernikahan::with('pengantin_pria', 'pengantin_wanita')->find($dataPernikahan->id);
+        return Pernikahan::with('pengantin')->find($dataPernikahan->id);
     }
 }
 
 if(! function_exists('edit_form_pernikahan')){
     function edit_form_pernikahan($req, $id){
-        $pria = PengantinPria::find($req['pengantin_pria_id']);
+        $pria = Pengantin::find($req['pengantin_pria_id']);
         $data_pria = [
             "nama" => $req['nama_pria'],
             "waktu_baptis" => Carbon::parse($req['waktu_baptis_pria'], "Asia/Jakarta"),
@@ -476,7 +479,7 @@ if(! function_exists('edit_form_pernikahan')){
         $pria ->update($data_pria);
 
         // pengantin wanita
-        $wanita = PengantinWanita::find($req['pengantin_wanita_id']);
+        $wanita = Pengantin::find($req['pengantin_wanita_id']);
         $data_wanita = [
             "nama" => $req['nama_wanita'],
             "waktu_baptis" => Carbon::parse($req['waktu_baptis_wanita'], "Asia/Jakarta"),
@@ -510,6 +513,6 @@ if(! function_exists('edit_form_pernikahan')){
         ];
         $dataPernikahan->update($data);
 
-        return Pernikahan::with('pengantin_pria', 'pengantin_wanita')->find($id);
+        return Pernikahan::with('pengantin')->find($id);
     }
 }

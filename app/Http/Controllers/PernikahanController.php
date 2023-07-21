@@ -28,6 +28,9 @@ class PernikahanController extends Controller
     {
         try {
             $data = create_form_pernikahan($request->all());
+            $data->pengantin_wanita = $data->pengantin[0]->jk_pengantin == "Wanita" ? $data->pengantin[0] : $data->pengantin[1]; 
+            $data->pengantin_pria = $data->pengantin[0]->jk_pengantin == "Pria" ? $data->pengantin[0] : $data->pengantin[1]; 
+            
             send_pdf_email($data, $request->email, 'pernikahan');
 
             return redirect()->route('pernikahan.index')->with('msg_success', "Berhasil membuat formulir pernikahan");

@@ -26,6 +26,7 @@ class CreateKkjAnaksTable extends Migration
             $table->enum("baptis", ['Y', "T"]);
             $table->enum("nikah", ['Y', "T"]);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

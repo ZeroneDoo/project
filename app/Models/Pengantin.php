@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class PengantinPria extends Model
+class Pengantin extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
 
@@ -18,6 +19,6 @@ class PengantinPria extends Model
         return $this->belongsTo(KkjKeluarga::class);
     }
     public function pernikahan(){
-        return $this->hasOne(Pernikahan::class);
+        return $this->belongsTo(Pernikahan::class);
     }
 }
