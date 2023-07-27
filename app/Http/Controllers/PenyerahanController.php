@@ -7,6 +7,7 @@ use App\Http\Requests\Penyerahan\{
     UpdateRequest,
 };
 use App\Models\Penyerahan;
+use App\Models\Wali;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +15,7 @@ class PenyerahanController extends Controller
 {
     public function index()
     {
-        $datas = Penyerahan::with('kkj_anak', 'kkj_keluarga')->paginate(4);
+        $datas = Penyerahan::with('anggota_keluarga')->paginate(4);
         return view("penyerahan.index", compact('datas'));
     }
 
@@ -41,9 +42,11 @@ class PenyerahanController extends Controller
 
     public function edit($id)
     {
-        $data = Penyerahan::with('kkj_anak.kkj', 'kkj_anak.kkj_kepala_keluarga', 'kkj_anak.kkj_pasangan')->find($id);
-        $datarelasi = $data->kkj_anak ? $data->kkj_anak : $data->kkj_keluarga;
-        return view('penyerahan.form', compact('data', 'datarelasi'));
+        $data = Penyerahan::with('kkj', 'anggota_keluarga')->find($id);
+        $data->kepala_keluarga = Wali::where('kkj_id', $data->kkj->id)->where('status', 'kepala keluarga')->first();
+        $data->pasangan = Wali::where('kkj_id', $data->kkj->id)->where('status', 'pasangan')->first();
+
+        return view('penyerahan.form', compact('data'));
     }
 
     public function update(UpdateRequest $request, $id)
@@ -65,6 +68,11 @@ class PenyerahanController extends Controller
             }
 
             $penyerahan->update($data);
+            
+            $penyerahan->kepala_keluarga = Wali::where('kkj_id', $penyerahan->kkj_id)->where('status', 'kepala keluarga')->first();
+            $penyerahan->pasangan = Wali::where('kkj_id', $penyerahan->kkj_id)->where('status', 'pasangan')->first();
+
+            send_pdf_email($penyerahan, $penyerahan->kkj->email, 'penyerahan');
 
             return redirect()->route("penyerahan.index")->with("msg_success", "Berhasil mengubah formulir penyerahan");
         } catch (\Throwable $th) {

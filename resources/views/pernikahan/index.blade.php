@@ -26,8 +26,8 @@ Pernikahan
                         @foreach ($datas as $i => $data)
                         <tr>
                             <td>{{ $i + $datas->FirstItem() }}</td>
-                            <td>{{ $data->pengantin_pria->nama }}</td>
-                            <td>{{ $data->pengantin_wanita->nama }}</td>
+                            <td>@foreach($data->pengantin as $pengantin_pria){{  $pengantin_pria->anggota_keluarga ? $pengantin_pria->anggota_keluarga->nama : ($pengantin_pria->jk == 'pria' ? $pengantin_pria->nama : '')}}@endforeach</td>
+                            <td>@foreach($data->pengantin as $pengantin_wanita){{  $pengantin_wanita->anggota_keluarga ? $pengantin_wanita->anggota_keluarga->nama : ($pengantin_wanita->jk == 'wanita' ? $pengantin_wanita->nama : '')}}@endforeach</td>
                             <td>{{ Carbon\Carbon::parse($data->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</td>
                             <td>
                                 <div style="display: flex; gap: 5px;">

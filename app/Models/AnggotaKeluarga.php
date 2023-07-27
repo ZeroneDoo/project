@@ -6,22 +6,25 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Pernikahan extends Model
+class AnggotaKeluarga extends Model
 {
     use HasFactory, SoftDeletes;
-
-    protected $guarded = ['id'];
-
-    public static function boot()
+    protected $guarded = ['id'];public static function boot()
     {
         parent::boot();
 
         static::deleting(function ($post) {
-            $post->pengantin()->delete();
+            $post->baptiss()->delete();
         });
     }
 
-    public function pengantin(){
-        return $this->hasMany(Pengantin::class);
+
+
+    public function kkj(){
+        return $this->belongsTo(Kkj::class);
+    }
+
+    public function baptiss(){
+        return $this->hasMany(Baptis::class);
     }
 }

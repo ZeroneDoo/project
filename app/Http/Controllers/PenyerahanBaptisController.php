@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\{
+    AnggotaKeluarga,
     Baptis,
     Kkj,
-    KkjAnak,
-    KkjKeluarga,
-    Penyerahan
+    Penyerahan,
+    Wali
 };
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -39,11 +39,14 @@ class PenyerahanBaptisController extends Controller
     public function store(Request $request)
     {
         try {
+            $kkj = Kkj::where('kode', $request->search)->first();
+
             $data = [
-                'kkj_anak_id' => $request->hubungan == "anak" ? $request->id : null,
-                'kkj_keluarga_id' => $request->hubungan =="keluarga" ? $request->id : null,
+                "kkj_id" => $kkj->id,
+                'anggota_keluarga_id' => $request->id,
                 'waktu' => Carbon::parse($request->waktu, 'Asia/Jakarta'),
                 'pendeta' => $request->pendeta,
+                "status" => "waiting"
             ];
             
             if(!isset($request->baptis) && !isset($request->penyerahan)) return back()->with("msg_error", "Gagal membuat data penyerahan/baptis");
@@ -56,15 +59,11 @@ class PenyerahanBaptisController extends Controller
                 }
                 
                 $dataBaptis = Baptis::create($data);
-                // hubungan
-                if($request->hubungan == "anak"){
-                    $anak = KkjAnak::with('kkj', 'baptiss', 'penyerahan', 'kkj_kepala_keluarga', 'kkj_pasangan')->find($request->id);
-                    $anak->update(['baptis' => "Y"]);
-                }else if($request->hubungan == "keluarga"){
-                    $anak = KkjKeluarga::with('kkj', 'baptiss', 'penyerahan', 'kkj_kepala_keluarga', 'kkj_pasangan')->find($request->id);
-                    $anak->update(['baptis' => "Y"]);
-                }
-                send_pdf_email($anak, $anak->kkj->email, 'baptis');
+
+                $dataBaptis->kepala_keluarga = Wali::where('kkj_id', $dataBaptis->kkj_id)->where('status', 'kepala keluarga')->first();
+                $dataBaptis->pasangan = Wali::where('kkj_id', $dataBaptis->kkj_id)->where('status', 'pasangan')->first();
+                
+                send_pdf_email($dataBaptis, $dataBaptis->kkj->email, 'baptis');
             } 
 
             if($request->penyerahan == "on"){
@@ -75,15 +74,11 @@ class PenyerahanBaptisController extends Controller
                 }
 
                 $dataPenyerahan = Penyerahan::create($data);
-                // hubungan
-                if($request->hubungan == "anak"){
-                    $anak = KkjAnak::with('kkj', 'baptiss', 'penyerahan', 'kkj_kepala_keluarga', 'kkj_pasangan')->find($request->id);
-                    $anak->update(['diserahkan' => "Y"]);
-                }else if($request->hubungan == "keluarga"){
-                    $anak = KkjKeluarga::with('kkj', 'baptiss', 'penyerahan', 'kkj_kepala_keluarga', 'kkj_pasangan')->find($request->id);
-                    $anak->update(['diserahkan' => "Y"]);
-                }
-                send_pdf_email($anak, $anak->kkj->email, 'penyerahan');
+
+                $dataPenyerahan->kepala_keluarga = Wali::where('kkj_id', $dataPenyerahan->kkj_id)->where('status', 'kepala keluarga')->first();
+                $dataPenyerahan->pasangan = Wali::where('kkj_id', $dataPenyerahan->kkj_id)->where('status', 'pasangan')->first();
+
+                send_pdf_email($dataPenyerahan, $dataPenyerahan->kkj->email, 'penyerahan');
             } 
 
             return back()->with("msg_success", "Berhasil membuat penyerahan/baptis");
@@ -114,12 +109,12 @@ class PenyerahanBaptisController extends Controller
 
     public function searchKkj(Request $request)
     {
-        $dataKkj = Kkj::with('kkj_kepala_keluarga','kkj_pasangan', 'kkj_anak', 'kkj_keluarga', 'urgent')->where('kode', $request->kode)->first();
+        $dataKkj = Kkj::where('kode', $request->kode)->first();
 
         if($request->hubungan =="anak"){
-            $datas = $dataKkj->kkj_anak;
+            $datas = AnggotaKeluarga::where("kkj_id",$dataKkj->id)->where('hubungan', 'Anak')->get();
         }else if ($request->hubungan =="keluarga"){
-            $datas = $dataKkj->kkj_keluarga;
+            $datas = AnggotaKeluarga::where("kkj_id",$dataKkj->id)->where('hubungan', "<>",'Anak')->get();
         }
 
         return $datas;
@@ -127,12 +122,12 @@ class PenyerahanBaptisController extends Controller
 
     public function getKandidat(Request $request)
     {
-        if($request->hubungan == "anak"){
-            $data = KkjAnak::with('kkj_pasangan', 'kkj_kepala_keluarga', 'kkj')->find($request->id);
-        }else if($request->hubungan == "keluarga"){
-            $data = KkjKeluarga::with('kkj_pasangan', 'kkj_kepala_keluarga', 'kkj')->find($request->id);
-        }
+        $data = AnggotaKeluarga::with("kkj", "baptiss")->find($request->id);
+
+        $data->kepala_keluarga = Wali::where('kkj_id', $data->kkj->id)->where('status', 'kepala keluarga')->first();
+        $data->pasangan = Wali::where('kkj_id', $data->kkj->id)->where('status', 'pasangan')->first();
         $data->tgl_lahir = Carbon::parse($data->tgl_lahir, 'Asia/Jakarta')->translatedFormat('d F Y');
+
         return $data;
     }
 }

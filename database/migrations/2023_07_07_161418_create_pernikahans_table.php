@@ -10,13 +10,13 @@ class CreatePernikahansTable extends Migration
     {
         Schema::create('pernikahans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('pengantin_pria_id')->onDelete('cascade');
-            $table->foreignId('pengantin_wanita_id')->onDelete('cascade');
             $table->string('email');
             $table->timestamp('waktu_pernikahan');
             $table->string('tmpt_pernikahan');
             $table->string('alamat_setelah_menikah');
+            $table->enum('status', ['waiting', 'done']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

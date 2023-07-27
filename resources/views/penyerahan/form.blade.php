@@ -17,28 +17,28 @@
                     <label for="nama">Nama</label>
                     <div class="row">
                         <div class="col">
-                            <input type="text" disabled value="{{ isset($data) ? $datarelasi->nama : '' }}" name="nama" class="form-control">
+                            <input type="text" disabled value="{{ isset($data) ? $data->anggota_keluarga->nama : '' }}" name="nama" class="form-control">
                         </div>
                         <div class="col-5">
-                            <input type="text" disabled value="{{ isset($data) ? ($datarelasi->jk == 'L' ? 'Laki-Laki':'Perempuan' ) : '' }}" name="jk" class="form-control">
+                            <input type="text" disabled value="{{ isset($data) ? ($data->anggota_keluarga->jk == 'L' ? 'Laki-Laki':'Perempuan' ) : '' }}" name="jk" class="form-control">
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="alamat">Alamat</label>
-                    <textarea name="alamat" id="alamat" class="form-control" disabled>{{ isset($data) ? $datarelasi->kkj->alamat : ''}}</textarea>
+                    <textarea name="alamat" id="alamat" class="form-control" disabled>{{ isset($data) ? $data->kkj->alamat : ''}}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="tmpt_lahir">Tempat & Tanggal Lahir</label>
-                    <input type="text" class="form-control" disabled value="{{ isset($data) ? $datarelasi->tmpt_lahir .', '. Carbon\Carbon::parse($datarelasi->tgl_lahir, 'Asia/Jakarta')->translatedFormat('d F Y') : '' }}">
+                    <input type="text" class="form-control" disabled value="{{ isset($data) ? $data->anggota_keluarga->tmpt_lahir .', '. Carbon\Carbon::parse($data->anggota_keluarga->tgl_lahir, 'Asia/Jakarta')->translatedFormat('d F Y') : '' }}">
                 </div>
                 <div class="form-group">
                     <label for="">Nama Ayah</label>
-                    <input type="text" disabled class="form-control" value="{{ isset($data) ? $datarelasi->kkj_kepala_keluarga->nama : '' }}">
+                    <input type="text" disabled class="form-control" value="{{ isset($data) ? $data->kepala_keluarga->nama : '' }}">
                 </div>
                 <div class="form-group">
                     <label for="">Nama Ibu</label>
-                    <input type="text" disabled class="form-control" value="{{ isset($data) ? ($datarelasi->kkj_pasangan ? $datarelasi->kkj_pasangan->nama : 'Tidak Ada') : '' }}">
+                    <input type="text" disabled class="form-control" value="{{ isset($data) ? ($data->pasangan ? $data->pasangan->nama : 'Tidak Ada') : '' }}">
                 </div>
             </div>
             {{-- /data kandidat --}}

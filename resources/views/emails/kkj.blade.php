@@ -57,56 +57,56 @@
                     <div class="card-body">
                         <p style="margin-bottom: 1.5rem; font-weight: 600; font-size: 14px">Kepala Keluarga</p>
                         <div>
-                            <label for="nama_kepala_keluarga">Nama Lengkap : {{ $data->kkj_kepala_keluarga->nama }}</label>
+                            <label for="nama_kepala_keluarga">Nama Lengkap : {{ $data->kepala_keluarga->nama }}</label>
                         </div>
                         <div class="div">
-                            <label for="nama_kepala_keluarga">Jenis Kelamin : {{  $data->kkj_kepala_keluarga->jk == "L"? "Laki Laki":"Perempuan" }}</label>
+                            <label for="nama_kepala_keluarga">Jenis Kelamin : {{  $data->kepala_keluarga->jk == "L"? "Laki Laki":"Perempuan" }}</label>
                         </div>
                         <div>
-                            <label for="tmpt_lahir">Tempat Lahir : {{ $data->kkj_kepala_keluarga->tmpt_lahir }}</label>
+                            <label for="tmpt_lahir">Tempat Lahir : {{ $data->kepala_keluarga->tmpt_lahir }}</label>
                         </div>
                         <div>
-                            <label for="tgl_lahir">Tanggal Lahir : {{ $data->kkj_kepala_keluarga->tgl_lahir }}</label>
+                            <label for="tgl_lahir">Tanggal Lahir : {{ $data->kepala_keluarga->tgl_lahir }}</label>
                         </div>
                         <div>
-                            <label for="pendidikan_terakhir">Pendidikan Terakhir : {{ $data->kkj_kepala_keluarga->pendidikan_terakhir }}</label>
+                            <label for="pendidikan_terakhir">Pendidikan Terakhir : {{ $data->kepala_keluarga->pendidikan_terakhir }}</label>
                         </div>
                         <div>
-                            <label for="pekerjaan">Pekerjaan : {{ $data->kkj_kepala_keluarga->pekerjaan }}</label>
+                            <label for="pekerjaan">Pekerjaan : {{ $data->kepala_keluarga->pekerjaan }}</label>
                         </div>
                         <div>
-                            <label for="baptis_date">Baptis Selam : {{ $data->kkj_kepala_keluarga->baptis }}</label>
+                            <label for="baptis_date">Baptis Selam : {{ $data->kepala_keluarga->baptis }}</label>
                         </div>
                     </div>
                 </div>
             </div>
             {{-- pasangan --}}
-            @if (isset($data->kkj_pasangan) && isset($data))
+            @if (isset($data->pasangan) && isset($data))
             <div class="col">
                 <div class="card">
                     <div class="card-body">
                         <p style="margin-bottom: 1.5rem;font-weight: 600; font-size: 14px">Pasangan</p>
                         <div>
-                            <label for="nama_pasangan">Nama Lengkap : {{ $data->kkj_pasangan->nama }}</label>
+                            <label for="nama_pasangan">Nama Lengkap : {{ $data->pasangan->nama }}</label>
                         </div>
                         <div>
-                            <label for="">Jenis Kelamin : {{  $data->kkj_pasangan->jk == "L"? "Laki Laki":"Perempuan" }}</label>
+                            <label for="">Jenis Kelamin : {{  $data->pasangan->jk == "L"? "Laki Laki":"Perempuan" }}</label>
                         </div>
                         </div>
                         <div>
-                            <label for="tmpt_lahir_pasangan">Tempat Lahir : {{ $data->kkj_pasangan->tmpt_lahir }}</label>
+                            <label for="tmpt_lahir_pasangan">Tempat Lahir : {{ $data->pasangan->tmpt_lahir }}</label>
                         </div>
                         <div>
-                            <label for="tgl_lahir_pasangan">Tanggal Lahir : {{ $data->kkj_pasangan->tgl_lahir }}</label>
+                            <label for="tgl_lahir_pasangan">Tanggal Lahir : {{ $data->pasangan->tgl_lahir }}</label>
                         </div>
                         <div>
-                            <label for="pendidikan_terakhir_pasangan">Pendidikan Terakhir : {{ $data->kkj_pasangan->pendidikan_terakhir }}</label>
+                            <label for="pendidikan_terakhir_pasangan">Pendidikan Terakhir : {{ $data->pasangan->pendidikan_terakhir }}</label>
                         </div>
                         <div>
-                            <label for="pekerjaan_pasangan">Pekerjaan : {{ $data->kkj_pasangan->pekerjaan }}</label>
+                            <label for="pekerjaan_pasangan">Pekerjaan : {{ $data->pasangan->pekerjaan }}</label>
                         </div>
                         <div>
-                            <label for="baptis_date_pasangan">Baptis Selam : {{ $data->kkj_pasangan->baptis }}</label>
+                            <label for="baptis_date_pasangan">Baptis Selam : {{ $data->pasangan->baptis }}</label>
                         </div>
                     </div>
                 </div>
@@ -126,17 +126,17 @@
             </div>
         </div>
         <div class="row g-4" style="margin-bottom: 0.75rem;" id="card_anak">
-            @if (count($data->kkj_anak) <= 0)
+            @if (count($data->anak) <= 0)
             <div>
                 <label>-</label>
             </div>
             @endif
             @if (isset($data))
-                @foreach ($data->kkj_anak as $i => $anak)
+                @foreach ($data->anak as $i => $anak)
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
-                            <p style="font-size: 14px; font-weight: bold">Anak {{ $i + 1 }}</p>
+                            <p style="font-size: 14px; font-weight: bold">{{ $anak->nama }}</p>
                             <div>
                                 <label for="nama_anak_edit">Nama Lengkap : {{ $anak->nama }}</label>
                             </div>
@@ -156,13 +156,13 @@
                                 <label for="pekerjaan_anak_edit">Pekerjaan : {{ $anak->pekerjaan }}</label>
                             </div>
                             <div>
-                                <label for="diserahkan_anak_edit">Diserahkan : {{ $anak->diserahkan }}</label>
+                                <label for="diserahkan_anak_edit">Diserahkan : {{ $anak->diserahkan == 'Y' ? 'Iya' : 'Tidak' }}</label>
                             </div>
                             <div>
-                                <label for="baptis_anak_edit">Baptis Selam : {{ $anak->baptis }}</label>
+                                <label for="baptis_anak_edit">Baptis Selam : {{ $anak->baptis == 'Y' ? 'Iya' : 'Tidak' }}</label>
                             </div>
                             <div>
-                                <label for="nikah_anak_edit">Nikah : {{ $anak->nikah }}</label>
+                                <label for="nikah_anak_edit">Nikah : {{ $anak->nikah == 'Y' ? 'Iya' : 'Tidak' }}</label>
                             </div>
                         </div>
                     </div>
@@ -185,17 +185,17 @@
         <div class="row g-4" id="card_keluarga">
             {{-- list --}}
             {{-- ajax --}}
-            @if (count($data->kkj_keluarga) <= 0)
+            @if (count($data->keluarga) <= 0)
             <div>
                 <label>-</label>
             </div>
             @endif
             @if (isset($data))
-                @foreach ($data->kkj_keluarga as $i => $keluarga)
+                @foreach ($data->keluarga as $i => $keluarga)
                 <div class="col-sm-6">
                     <div class="card">
                         <div class="card-body">
-                            <p style="font-size: 14px; font-weight: 600">Keluarga {{ $i + 1 }}</p>
+                            <p style="font-size: 14px; font-weight: 600">{{ $keluarga->nama }}.</p>
                             <div>
                                 <label>Nama Lengkap : {{ $keluarga->nama }}</label>
                             </div>
@@ -215,13 +215,13 @@
                                 <label>Pekerjaan : {{ $keluarga->pekerjaan }}</label>
                             </div>
                             <div>
-                                <label>Diserahkan : {{ $keluarga->diserahkan }}</label>
+                                <label>Diserahkan : {{ $keluarga->diserahkan == 'Y' ? 'Iya' : 'Tidak' }}</label>
                             </div>
                             <div>
-                                <label>Baptis Selam : {{ $keluarga->baptis }}</label>
+                                <label>Baptis Selam : {{ $keluarga->baptis == 'Y' ? 'Iya' : 'Tidak' }}</label>
                             </div>
                             <div>
-                                <label>Nikah : {{ $keluarga->nikah }}</label>
+                                <label>Nikah : {{ $keluarga->nikah == 'Y' ? 'Iya' : 'Tidak' }}</label>
                             </div>
                         </div>
                     </div>

@@ -17,7 +17,7 @@ Penyerahan
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
-                            <th>Tanggal Baptis</th>
+                            <th>Tanggal Penyerahan</th>
                             <th>Pendeta</th>
                             <th>Aksi</th>
                         </tr>
@@ -26,7 +26,7 @@ Penyerahan
                         @foreach ($datas as $i => $data)
                         <tr>
                             <td>{{ $i + $datas->FirstItem() }}</td>
-                            <td>{{ ($data->kkj_anak ? $data->kkj_anak->nama : $data->kkj_keluarga->nama) }}</td>
+                            <td>{{ $data->anggota_keluarga->nama }}</td>
                             <td>{{ Carbon\Carbon::parse($data->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</td>
                             <td>{{ $data->pendeta }}</td>
                             <td>

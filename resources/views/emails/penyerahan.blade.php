@@ -13,30 +13,30 @@
         {{-- data kandidat --}}
         <div >
             <div class="form-group">
-                <label for="nama">Nama : {{  $data->nama }}</label>
+                <label for="nama">Nama : {{  $data->anggota_keluarga->nama }}</label>
             </div>
             <div>
-                <label for="nama">Jenis Kelamin : {{  $data->jk == "L"? "Laki Laki":"Perempuan" }}</label>
+                <label for="nama">Jenis Kelamin : {{  $data->anggota_keluarga->jk == "L"? "Laki Laki":"Perempuan" }}</label>
             </div>
             <div class="form-group">
                 <label for="alamat">Alamat : {{  $data->kkj->alamat }}</label>
             </div>
             <div class="form-group">
-                <label for="tmpt_lahir">Tempat & Tanggal Lahir : {{  $data->tmpt_lahir .', '. Carbon\Carbon::parse($data->tgl_lahir, 'Asia/Jakarta')->translatedFormat('d F Y') }}</label>
+                <label for="tmpt_lahir">Tempat & Tanggal Lahir : {{  $data->anggota_keluarga->tmpt_lahir .', '. Carbon\Carbon::parse($data->anggota_keluarga->tgl_lahir, 'Asia/Jakarta')->translatedFormat('d F Y') }}</label>
             </div>
             <div class="form-group">
-                <label for="">Nama Ayah : {{  $data->kkj_kepala_keluarga->nama }}</label>
+                <label for="">Nama Ayah : {{  $data->kepala_keluarga->nama }}</label>
             </div>
             <div class="form-group">
-                <label for="">Nama Ibu : {{  $data->kkj_pasangan ? $data->kkj_pasangan->nama : "Tidak Ada" }}</label>
+                <label for="">Nama Ibu : {{  $data->pasangan ? $data->pasangan->nama : "Tidak Ada" }}</label>
             </div>
         </div>
         {{-- /data kandidat --}}
         <div class="form-group">
-            <label for="waktu">Tanggal Baptis : {{ Carbon\Carbon::parse($data->penyerahan->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</label>
+            <label for="waktu">Tanggal Penyerahan : {{ Carbon\Carbon::parse($data->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</label>
         </div>
         <div class="form-group">
-            <label for="pendeta">Pendeta : {{ $data->penyerahan->pendeta }}</label>
+            <label for="pendeta">Pendeta : {{ $data->pendeta }}</label>
         </div>
     </div>
 </body>

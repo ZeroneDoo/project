@@ -7,6 +7,7 @@ use App\Http\Requests\Baptis\{
     UpdateRequest,
 };
 use App\Models\Baptis;
+use App\Models\Wali;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +15,7 @@ class BaptisController extends Controller
 {
     public function index()
     {
-        $datas = Baptis::with('kkj_anak', 'kkj_keluarga')->paginate(4);
+        $datas = Baptis::with('anggota_keluarga')->paginate(4);
         return view("baptis.index", compact('datas'));
     }
 
@@ -41,9 +42,11 @@ class BaptisController extends Controller
 
     public function edit($id)
     {
-        $data = Baptis::with('kkj_anak.kkj_kepala_keluarga', 'kkj_anak.kkj', 'kkj_anak.kkj_pasangan')->find($id);
-        $datarelasi = $data->kkj_anak ? $data->kkj_anak : $data->kkj_keluarga;
-        return view("baptis.form", compact("data", 'datarelasi'));
+        $data = Baptis::with('kkj', 'anggota_keluarga')->find($id);
+        $data->kepala_keluarga = Wali::where('kkj_id', $data->kkj->id)->where('status', 'kepala keluarga')->first();
+        $data->pasangan = Wali::where('kkj_id', $data->kkj->id)->where('status', 'pasangan')->first();
+        
+        return view("baptis.form", compact("data"));
     }
 
     public function update(UpdateRequest $request, $id)
@@ -65,8 +68,12 @@ class BaptisController extends Controller
                 }
             }
             
-            // dd($data);
             $baptis->update($data);
+
+            $baptis->kepala_keluarga = Wali::where('kkj_id', $baptis->kkj_id)->where('status', 'kepala keluarga')->first();
+            $baptis->pasangan = Wali::where('kkj_id', $baptis->kkj_id)->where('status', 'pasangan')->first();
+
+            send_pdf_email($baptis, $baptis->kkj->email, 'baptis');
 
             return redirect()->route("baptis.index")->with("msg_success", "Berhasil mengubah formulir baptis");
         } catch (\Throwable $th) {
@@ -76,10 +83,9 @@ class BaptisController extends Controller
 
     public function destroy($id)
     {
-        $baptis = Baptis::with('kkj_anak')->find($id);
+        $baptis = Baptis::find($id);
         if(!$baptis) return abort(403, "TIDAK ADA DATA TERSEBUT");
 
-        $baptis->kkj_anak->update(['baptis' => 'T']);
         $baptis->delete();
 
         return redirect()->route("baptis.index")->with("msg_success", "Berhasil menghapus formulir baptis");

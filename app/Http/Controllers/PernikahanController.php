@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\{
+    AnggotaKeluarga,
+    Baptis,
     Kkj,
-    KkjAnak,
-    KkjKeluarga,
     Pernikahan,
+    Wali,
 };
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ class PernikahanController extends Controller
 {
     public function index()
     {
-        $datas = Pernikahan::with('pengantin_pria', 'pengantin_wanita')->paginate(4);
+        $datas = Pernikahan::with('pengantin', 'pengantin.anggota_keluarga')->paginate(4);
+
         return view("pernikahan.index", compact('datas'));
     }
 
@@ -28,6 +30,7 @@ class PernikahanController extends Controller
     {
         try {
             $data = create_form_pernikahan($request->all());
+            
             send_pdf_email($data, $request->email, 'pernikahan');
 
             return redirect()->route('pernikahan.index')->with('msg_success', "Berhasil membuat formulir pernikahan");
@@ -63,8 +66,6 @@ class PernikahanController extends Controller
     {
         if(!$pernikahan) return abort(403, 'DATA TERSEBUT TIDAK TERSEDIA');
 
-        $pernikahan->pengantin_pria->delete();
-        $pernikahan->pengantin_wanita->delete();
         $pernikahan->delete();
 
         return redirect()->route('pernikahan.index')->with('msg_success', 'Berhasil menghapus data pernikahan');
@@ -72,12 +73,12 @@ class PernikahanController extends Controller
 
     public function searchKkj(Request $request)
     {
-        $dataKkj = Kkj::with('kkj_kepala_keluarga','kkj_pasangan', 'kkj_anak', 'kkj_keluarga', 'urgent')->where('kode', $request->kode)->first();
+        $dataKkj = Kkj::where('kode', $request->kode)->first();
 
         if($request->hubungan =="anak"){
-            $datas = $dataKkj->kkj_anak;
+            $datas = AnggotaKeluarga::where("kkj_id",$dataKkj->id)->where('hubungan', 'Anak')->get();
         }else if ($request->hubungan =="keluarga"){
-            $datas = $dataKkj->kkj_keluarga;
+            $datas = AnggotaKeluarga::where("kkj_id",$dataKkj->id)->where('hubungan', "<>",'Anak')->get();
         }
 
         return $datas;
@@ -86,14 +87,16 @@ class PernikahanController extends Controller
     public function getKandidat(Request $request)
     {
         try {
-            if($request->hubungan == "anak"){
-                $data = KkjAnak::with('kkj_pasangan', 'kkj_kepala_keluarga', 'kkj', 'baptiss')->find($request->id);
-            }else if($request->hubungan == "keluarga"){
-                $data = KkjKeluarga::with('kkj_pasangan', 'kkj_kepala_keluarga', 'kkj', 'baptiss')->find($request->id);
-            }
-    
+            $data = AnggotaKeluarga::with('kkj')->find($request->id);
+
+            $data->kepala_keluarga = Wali::where('kkj_id', $data->kkj->id)->where('status', 'kepala keluarga')->first();
+            $data->pasangan = Wali::where('kkj_id', $data->kkj->id)->where('status', 'pasangan')->first();
+
+            $data->baptiss = Baptis::find($data->id);
             $data->baptiss->waktu_format = Carbon::parse($data->baptiss->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i');
+
             $data->tgl_lahir_format = Carbon::parse($data->tgl_lahir, 'Asia/Jakarta')->translatedFormat('d F Y');
+
             return $data;
         } catch (\Throwable $th) {
             return "info";

@@ -16,6 +16,7 @@ class CreateUrgentsTable extends Migration
             $table->string('telp');
             $table->string('hubungan');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

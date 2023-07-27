@@ -7,11 +7,13 @@ use App\Http\Requests\KKJ\{
     UpdateRequest
 };
 use App\Models\{
+    AnggotaKeluarga,
     Kkj,
     KkjAnak,
     KkjKeluarga,
     KkjKepalaKeluarga,
-    KkjPasangan
+    KkjPasangan,
+    Wali
 };
 use Illuminate\Http\Request;
 
@@ -36,6 +38,7 @@ class KkjController extends Controller
     {
         try {
             $kkj = kartu_keluarga_jemaat($request->all());
+            
             send_pdf_email($kkj, $request->email, 'kkj');
             
             return redirect()->route("kkj.index")->with("msg_success", "Berhasil menambahkan kartu keluarga jemaat");
@@ -51,19 +54,27 @@ class KkjController extends Controller
 
     public function edit(Kkj $kkj)
     {
-        $data = Kkj::with(['kkj_kepala_keluarga', 'kkj_pasangan', 'kkj_anak', 'kkj_keluarga', 'urgent'])->find($kkj->id);
+        $data = Kkj::with(['wali', 'anggota_keluarga', 'urgent'])->find($kkj->id);
+
+        $kepalaKeluarga = Wali::where('kkj_id', $kkj->id)->where('status', 'kepala keluarga')->first();
+        $pasangan = Wali::where('kkj_id', $kkj->id)->where('status', 'pasangan')->first();
+        
+        $anaks = AnggotaKeluarga::where('kkj_id', $kkj->id)->where('hubungan', 'Anak')->get();
+        $keluargas = AnggotaKeluarga::where('kkj_id', $kkj->id)->where('hubungan', "<>",'Anak')->get();
+        
         $status_menikah = ["Sudah Menikah", "Belum Menikah", "Cerai"];
         $jenjangs = ['SD', 'SMP', 'SMA/Sederajat', 'D1', 'D2', "D3", 'S1', 'S2', "S3"];
         $hubungans = ["Ayah", "Ibu", "Kakak", "Adik", "Suami", "Istri", "Keponakan", "Sepupu"];
-        return view("kkj.form", compact("data", "status_menikah", 'jenjangs', 'hubungans'));
+
+        return view("kkj.form", compact("data", "status_menikah", 'jenjangs', 'hubungans', 'kepalaKeluarga', 'pasangan', 'anaks', 'keluargas'));
     }
 
     public function update(UpdateRequest $request, Kkj $kkj)
     {
         try {
             $kkj = edit_kartu_kerluarga_jemaat($request->all(), $kkj->id);
+            
             send_pdf_email($kkj, $request->email, 'kkj');
-
             return redirect()->route("kkj.index")->with("msg_success", "Berhasil mengubah kartu keluarga jemaat");
         } catch (\Throwable $th) {
             return redirect()->route("kkj.index")->with("msg_error", "Gagal mengubah kartu keluarga jemaat");
@@ -81,7 +92,7 @@ class KkjController extends Controller
 
     public function destroyAnak($id)
     {
-        $kkjAnak = KkjAnak::find($id);
+        $kkjAnak = AnggotaKeluarga::find($id);
         if(!$kkjAnak) return abort(403, "TIDAK ADA DATA TERSEBUT");
 
         $kkjAnak->delete();
@@ -91,7 +102,7 @@ class KkjController extends Controller
 
     public function destroyKeluarga($id)
     {
-        $kkjKeluarga = KkjKeluarga::find($id);
+        $kkjKeluarga = AnggotaKeluarga::find($id);
         if(!$kkjKeluarga) return abort(403, "TIDAK ADA DATA TERSEBUT");
 
         $kkjKeluarga->delete();

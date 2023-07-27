@@ -102,41 +102,41 @@
                             <label for="nama_kepala_keluarga">Nama Lengkap *</label>
                             <div class="row" style="margin-top: 0.75rem; margin-bottom: 0.75rem">
                                 <div class="col">
-                                    <input type="text" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->nama : old("nama_kepala_keluarga")}}" class="form-control" name="nama_kepala_keluarga"
+                                    <input type="text" required value="{{ isset($data) ? $kepalaKeluarga->nama : old("nama_kepala_keluarga")}}" class="form-control" name="nama_kepala_keluarga"
                                         id="nama_kepala_keluarga">
                                 </div>
                                 <div class="col-5">
                                     <select name="jk" required class="form-select" id="jk">
                                         <option value="" hidden selected>Jenis Kelamin</option>
-                                        <option {{ isset($data) ? ($data->kkj_kepala_keluarga->jk == "L" ? 'selected' : '') : '' }} value="L">Laki-Laki</option>
-                                        <option {{ isset($data) ? ($data->kkj_kepala_keluarga->jk == "P" ? 'selected' : '') : '' }} value="P">Perempuan</option>
+                                        <option {{ isset($data) ? ($kepalaKeluarga->jk == "L" ? 'selected' : '') : '' }} value="L">Laki-Laki</option>
+                                        <option {{ isset($data) ? ($kepalaKeluarga->jk == "P" ? 'selected' : '') : '' }} value="P">Perempuan</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="tmpt_lahir">Tempat Lahir *</label>
-                            <input type="text" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->tmpt_lahir : old('tmpt_lahir') }}" class="form-control" name="tmpt_lahir"
+                            <input type="text" required value="{{ isset($data) ? $kepalaKeluarga->tmpt_lahir : old('tmpt_lahir') }}" class="form-control" name="tmpt_lahir"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tmpt_lahir">
                         </div>
                         <div class="form-group">
                             <label for="tgl_lahir">Tanggal Lahir *</label>
-                            <input type="date" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->tgl_lahir : old('tgl_lahir') }}" class="form-control" name="tgl_lahir"
+                            <input type="date" required value="{{ isset($data) ? $kepalaKeluarga->tgl_lahir : old('tgl_lahir') }}" class="form-control" name="tgl_lahir"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tgl_lahir">
                         </div>
                         <div class="form-group">
                             <label for="pendidikan_terakhir">Pendidikan Terakhir  *</label>
-                            <input type="text" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->pendidikan_terakhir : old('pendidikan_terakhir') }}" class="form-control" name="pendidikan_terakhir"
+                            <input type="text" required value="{{ isset($data) ? $kepalaKeluarga->pendidikan_terakhir : old('pendidikan_terakhir') }}" class="form-control" name="pendidikan_terakhir"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pendidikan_terakhir">
                         </div>
                         <div class="form-group">
                             <label for="pekerjaan">Pekerjaan  *</label>
-                            <input type="text" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->pekerjaan : old('pekerjaan') }}" class="form-control" name="pekerjaan"
+                            <input type="text" required value="{{ isset($data) ? $kepalaKeluarga->pekerjaan : old('pekerjaan') }}" class="form-control" name="pekerjaan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pekerjaan">
                         </div>
                         <div class="form-group">
                             <label for="baptis_date">Baptis Selam *</label>
-                            <input type="date" required value="{{ isset($data) ? $data->kkj_kepala_keluarga->baptis : old('baptis') }}" class="form-control" name="baptis_date"
+                            <input type="date" required value="{{ isset($data) ? $kepalaKeluarga->baptis : old('baptis') }}" class="form-control" name="baptis_date"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="baptis_date">
                         </div>
                         <div class="form-group">
@@ -148,7 +148,7 @@
                 </div>
             </div>
             {{-- pasangan --}}
-            @if (isset($data->kkj_pasangan) && isset($data))
+            @if (isset($pasangan) && isset($data))
             <div class="col" id="card_pasangan" hidden>
                 <input type="hidden" name="pasangan" value="pasangan">
                 <div class="card">
@@ -158,41 +158,41 @@
                             <label for="nama_pasangan">Nama Lengkap *</label>
                             <div class="row" style="margin-top: 0.75rem; margin-bottom: 0.75rem">
                                 <div class="col">
-                                    <input type="text" required value="{{ isset($data) ? $data->kkj_pasangan->nama : old('nama') }}" class="form-control" name="nama_pasangan"
+                                    <input type="text" required value="{{ isset($data) ? $pasangan->nama : old('nama') }}" class="form-control" name="nama_pasangan"
                                         id="nama_pasangan">
                                 </div>
                                 <div class="col-5">
                                     <select name="jk_pasangan" required class="form-select" id="jk_pasangan">
                                         <option value="" hidden selected>Jenis Kelamin</option>
-                                        <option {{ isset($data) ? ($data->kkj_pasangan->jk == "L" ? 'selected' : '' ) : '' }} value="L">Laki-Laki</option>
-                                        <option {{ isset($data) ? ($data->kkj_pasangan->jk == "P" ? 'selected' : '') : '' }} value="P">Perempuan</option>
+                                        <option {{ isset($data) ? ($pasangan->jk == "L" ? 'selected' : '' ) : '' }} value="L">Laki-Laki</option>
+                                        <option {{ isset($data) ? ($pasangan->jk == "P" ? 'selected' : '') : '' }} value="P">Perempuan</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="tmpt_lahir_pasangan">Tempat Lahir *</label>
-                            <input type="text" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->tmpt_lahir : old('tmpt_lahir') }}" name="tmpt_lahir_pasangan"
+                            <input type="text" class="form-control" required value="{{ isset($data) ? $pasangan->tmpt_lahir : old('tmpt_lahir') }}" name="tmpt_lahir_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tmpt_lahir_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="tgl_lahir_pasangan">Tanggal Lahir *</label>
-                            <input type="date" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->tgl_lahir : old('tgl_lahir') }}" name="tgl_lahir_pasangan"
+                            <input type="date" class="form-control" required value="{{ isset($data) ? $pasangan->tgl_lahir : old('tgl_lahir') }}" name="tgl_lahir_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tgl_lahir_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="pendidikan_terakhir_pasangan">Pendidikan Terakhir  *</label>
-                            <input type="text" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->pendidikan_terakhir : old('pendidikan_terakhir') }}" name="pendidikan_terakhir_pasangan"
+                            <input type="text" class="form-control" required value="{{ isset($data) ? $pasangan->pendidikan_terakhir : old('pendidikan_terakhir') }}" name="pendidikan_terakhir_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pendidikan_terakhir_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="pekerjaan_pasangan">Pekerjaan  *</label>
-                            <input type="text" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->pekerjaan : old('pekerjaan') }}" name="pekerjaan_pasangan"
+                            <input type="text" class="form-control" required value="{{ isset($data) ? $pasangan->pekerjaan : old('pekerjaan') }}" name="pekerjaan_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pekerjaan_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="baptis_date_pasangan">Baptis Selam *</label>
-                            <input type="date" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->baptis : old('baptis') }}" name="baptis_date_pasangan"
+                            <input type="date" class="form-control" required value="{{ isset($data) ? $pasangan->baptis : old('baptis') }}" name="baptis_date_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="baptis_date_pasangan">
                         </div>
                     </div>
@@ -208,41 +208,41 @@
                             <label for="nama_pasangan">Nama Lengkap *</label>
                             <div class="row" style="margin-top: 0.75rem; margin-bottom: 0.75rem">
                                 <div class="col">
-                                    <input type="text" required value="{{ isset($data) ? $data->kkj_pasangan->nama : old('nama') }}" class="form-control" name="nama_pasangan"
+                                    <input type="text" required value="{{ isset($data) ? $pasangan->nama : old('nama') }}" class="form-control" name="nama_pasangan"
                                         id="nama_pasangan">
                                 </div>
                                 <div class="col-5">
                                     <select name="jk_pasangan" required class="form-select" id="jk_pasangan">
                                         <option value="" hidden selected>Jenis Kelamin</option>
-                                        <option {{ isset($data) ? ($data->kkj_pasangan->jk == "L" ? 'selected' : '' ) : '' }} value="L">Laki-Laki</option>
-                                        <option {{ isset($data) ? ($data->kkj_pasangan->jk == "P" ? 'selected' : '') : '' }} value="P">Perempuan</option>
+                                        <option {{ isset($data) ? ($pasangan->jk == "L" ? 'selected' : '' ) : '' }} value="L">Laki-Laki</option>
+                                        <option {{ isset($data) ? ($pasangan->jk == "P" ? 'selected' : '') : '' }} value="P">Perempuan</option>
                                     </select>
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="tmpt_lahir_pasangan">Tempat Lahir *</label>
-                            <input type="text" required class="form-control" value="{{ isset($data) ? $data->kkj_pasangan->tmpt_lahir : old('tmpt_lahir') }}" name="tmpt_lahir_pasangan"
+                            <input type="text" required class="form-control" value="{{ isset($data) ? $pasangan->tmpt_lahir : old('tmpt_lahir') }}" name="tmpt_lahir_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tmpt_lahir_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="tgl_lahir_pasangan">Tanggal Lahir *</label>
-                            <input type="date" required class="form-control" value="{{ isset($data) ? $data->kkj_pasangan->tgl_lahir : old('tgl_lahir') }}" name="tgl_lahir_pasangan"
+                            <input type="date" required class="form-control" value="{{ isset($data) ? $pasangan->tgl_lahir : old('tgl_lahir') }}" name="tgl_lahir_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="tgl_lahir_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="pendidikan_terakhir_pasangan">Pendidikan Terakhir  *</label>
-                            <input type="text" required class="form-control" value="{{ isset($data) ? $data->kkj_pasangan->pendidikan_terakhir : old('pendidikan_terakhir') }}" name="pendidikan_terakhir_pasangan"
+                            <input type="text" required class="form-control" value="{{ isset($data) ? $pasangan->pendidikan_terakhir : old('pendidikan_terakhir') }}" name="pendidikan_terakhir_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pendidikan_terakhir_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="pekerjaan_pasangan">Pekerjaan  *</label>
-                            <input type="text" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->pekerjaan : old('pekerjaan') }}" name="pekerjaan_pasangan"
+                            <input type="text" class="form-control" required value="{{ isset($data) ? $pasangan->pekerjaan : old('pekerjaan') }}" name="pekerjaan_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="pekerjaan_pasangan">
                         </div>
                         <div class="form-group">
                             <label for="baptis_date_pasangan">Baptis Selam *</label>
-                            <input type="date" class="form-control" required value="{{ isset($data) ? $data->kkj_pasangan->baptis : old('baptis') }}" name="baptis_date_pasangan"
+                            <input type="date" class="form-control" required value="{{ isset($data) ? $pasangan->baptis : old('baptis') }}" name="baptis_date_pasangan"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="baptis_date_pasangan">
                         </div>
                     </div>
@@ -269,7 +269,7 @@
             {{-- list --}}
             {{-- ajax --}}
             @if (isset($data))
-                @foreach ($data->kkj_anak as $anak)
+                @foreach ($anaks as $anak)
                 <div class="col-sm-6">
                     <input type="hidden" required name="id_anak[]" value="{{ $anak->id }}" id="id_anak">
                         <div class="card">
@@ -364,7 +364,7 @@
             {{-- list --}}
             {{-- ajax --}}
             @if (isset($data))
-                @foreach ($data->kkj_keluarga as $i => $keluarga)
+                @foreach ($keluargas as $i => $keluarga)
                 <div class="col-sm-6" style="margin-bottom: 1rem">
                     <input required type="hidden" name="id_keluarga[]" value="{{ $keluarga->id }}" id="id_keluarga">
                         <div class="card">

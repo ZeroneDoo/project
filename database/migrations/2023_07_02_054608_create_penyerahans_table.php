@@ -10,12 +10,14 @@ class CreatePenyerahansTable extends Migration
     {
         Schema::create('penyerahans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kkj_anak_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('kkj_keluarga_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('kkj_id')->constrained()->onDelete('cascade');
+            $table->foreignId('anggota_keluarga_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamp('waktu');
             $table->string('pendeta');
             $table->string('foto');
+            $table->enum('status', ['waiting', 'done']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

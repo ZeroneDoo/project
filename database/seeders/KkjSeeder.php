@@ -3,11 +3,13 @@
 namespace Database\Seeders;
 
 use App\Models\{
+    AnggotaKeluarga,
     Kkj,
     KkjAnak,
     KkjKepalaKeluarga,
     KkjPasangan,
     Urgent,
+    Wali,
 };
 use Illuminate\Database\Seeder;
 
@@ -43,9 +45,10 @@ class KkjSeeder extends Seeder
             "pendidikan_terakhir" => 'SMA',
             "pekerjaan" => "Buruh",
             "baptis" => "2023-07-07",
+            "status" => "kepala keluarga"
         ];
 
-        KkjKepalaKeluarga::create($dataKepalaKeluarga);
+        Wali::create($dataKepalaKeluarga);
         
         // pasangan
         $dataPasangan = [
@@ -57,9 +60,10 @@ class KkjSeeder extends Seeder
             "pendidikan_terakhir" => "SMK",
             "pekerjaan" => "PNS",
             "baptis" => "2023-07-07",
+            "status" => "pasangan"
         ];
 
-         KkjPasangan::create($dataPasangan);
+         Wali::create($dataPasangan);
 
         $dataAnak = [
             "kkj_id" => $kkj->id,
@@ -72,9 +76,10 @@ class KkjSeeder extends Seeder
             "diserahkan" => "T",
             "baptis" => "T",
             "nikah" => "T",
+            "hubungan" => 'Anak'
         ];
         
-        KkjAnak::create($dataAnak);
+        AnggotaKeluarga::create($dataAnak);
          // urgent
         $dataUrgent = [
             'kkj_id' => $kkj->id,

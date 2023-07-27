@@ -389,11 +389,11 @@ class Component {
                         </div>
                         <div class="form-group">
                             <label for="">Nama Ayah</label>
-                            <input type="text" disabled class="form-control" value="${res.kkj_kepala_keluarga.nama}">
+                            <input type="text" disabled class="form-control" value="${res.kepala_keluarga.nama}">
                         </div>
                         <div class="form-group">
                             <label for="">Nama Ibu</label>
-                            <input type="text" disabled class="form-control" value="${res.kkj_pasangan ?res.kkj_pasangan.nama : 'Tidak Ada'}">
+                            <input type="text" disabled class="form-control" value="${res.pasangan ?res.pasangan.nama : 'Tidak Ada'}">
                         </div>`
                     )
 
@@ -434,14 +434,14 @@ class Component {
             },
             success: function (res) {
                 if(res){
+                    console.log(res)
                     if(res == 'info') {
                         $("#card_pria").prop("hidden", true)
                         $("#card_wanita").prop("hidden", true)
                         Component.showAlert("Pengantin tersebut belum di baptis", res)
                         return
                     }
-                    Component.dataPengantin = res
-                    Component.jkPengantin(res.jk)
+                    Component.jkPengantin(res.jk, res)
                     $("#card_pria").prop("hidden", false)
                     $("#card_wanita").prop("hidden", false)
                 }
@@ -449,10 +449,9 @@ class Component {
         });
     }
 
-    static jkPengantin = (val) => {
+    static jkPengantin = (val, res) => {
         // let value = $(val).val()
         let value = val
-        let res = Component.dataPengantin
 
         if(value == 'L'){
             // reset wanita
@@ -519,15 +518,15 @@ class Component {
             // fill pria
             $("#pengantin_pria").html(`
             <p style="font-weight: 500; font-size: 20px">Pengantin Pria</p>
-            <input type="hidden" value="pengantin_pria" name="pengantin">
+            <input type="hidden" value="pria" name="pengantin_pria">
             <input type="hidden" value="${res.id}" name="id">
             <div class="form-group">
                 <label for="nama_pria">Nama Pria</label>
-                <input type="text" name="nama_pria" value="${res.nama}" required id="nama_pria" class="form-control">
+                <input type="text" name="nama_pria" disabled value="${res.nama}" required id="nama_pria" class="form-control">
             </div>
             <div class="form-group" style="margin-bottom:1rem">
                 <label for="">Hari, Tanggal Baptis Selam</label>
-                <input type="datetime-local" class="form-control" required value="${res.baptiss.waktu}" name="waktu_baptis_pria" id="waktu_baptis_pria">
+                <input type="datetime-local" class="form-control" required disabled value="${res.baptiss.waktu}" name="waktu_baptis_pria" id="waktu_baptis_pria">
                 <small style="font-weight:500">${res.baptiss.waktu_format}</small>
             </div>
             <div class="form-group">
@@ -544,11 +543,11 @@ class Component {
             </div>
             <div class="form-group">
                 <label for="tmpt_lahir_pria">Tempat Lahir</label>
-                <input type="text" class="form-control" name="tmpt_lahir_pria" required value="${res.tmpt_lahir}" id="tmpt_lahir_pria">
+                <input type="text" class="form-control" name="tmpt_lahir_pria" disabled required value="${res.tmpt_lahir}" id="tmpt_lahir_pria">
             </div>
             <div class="form-group" style="margin-bottom:1rem">
                 <label for="tgl_lahir_pria">Tanggal Lahir</label>
-                <input type="date" class="form-control" name="tgl_lahir_pria" required value="${res.tgl_lahir}" id="tgl_lahir_pria">
+                <input type="date" class="form-control" name="tgl_lahir_pria" disabled required value="${res.tgl_lahir}" id="tgl_lahir_pria">
                 <small style="font-weight:500">${res.tgl_lahir_format}</small>
             </div>
             <div class="form-group">
@@ -569,11 +568,11 @@ class Component {
             </div>
             <div class="form-group">
                 <label for="nama_ayah_pria">Nama Ayah</label>
-                <input class="form-control" name="nama_ayah_pria" required value="${res.kkj_kepala_keluarga.nama}" id="nama_ayah_pria">
+                <input class="form-control" name="nama_ayah_pria" required disabled value="${res.kepala_keluarga.nama}" id="nama_ayah_pria">
             </div>
             <div class="form-group">
                 <label for="nama_ibu_pria">Nama Ibu</label>
-                <input class="form-control" name="nama_ibu_pria" required value="${res.kkj_pasangan ? res.kkj_pasangan.nama : 'Tidak Ada'}" id="nama_ibu_pria">
+                <input class="form-control" name="nama_ibu_pria" required disabled value="${res.pasangan ? res.pasangan.nama : 'Tidak Ada'}" id="nama_ibu_pria">
             </div>
             <div class="form-group">
                 <label for="">Foto Pria</label>
@@ -646,14 +645,14 @@ class Component {
             $("#pengantin_wanita").html(`
             <p style="font-weight: 500; font-size: 20px">Pengantin Wanita</p>
             <input type="hidden" value="${res.id}" name="id">
-            <input type="hidden" value="pengantin_wanita" name="pengantin">
+            <input type="hidden" value="wanita" name="pengantin_wanita">
             <div class="form-group">
                 <label for="nama_wanita">Nama Wanita</label>
-                <input type="text" name="nama_wanita" id="nama_wanita" required value="${res.nama}" class="form-control">
+                <input type="text" name="nama_wanita" id="nama_wanita" disabled required value="${res.nama}" class="form-control">
             </div>
             <div class="form-group" style="margin-bottom:1rem">
                 <label for="">Hari, Tanggal Baptis Selam</label>
-                <input type="datetime-local" class="form-control" required name="waktu_baptis_wanita" value="${res.baptiss.waktu}" id="waktu_baptis_wanita">
+                <input type="datetime-local" class="form-control" required name="waktu_baptis_wanita" disabled value="${res.baptiss.waktu}" id="waktu_baptis_wanita">
                 <small style="font-weight:500">${res.baptiss.waktu_format}</small>
             </div>
             <div class="form-group">
@@ -666,15 +665,15 @@ class Component {
             </div>
             <div class="form-group">
                 <label for="no_ktp_wanita">No. KTP</label>
-                <input type="number" class="form-control" name="no_ktp_wanita" required id="no_ktp_wanita">
+                <input type="number" class="form-control" name="no_ktp_wanita"  required id="no_ktp_wanita">
             </div>
             <div class="form-group">
                 <label for="tmpt_lahir_wanita">Tempat Lahir</label>
-                <input type="text" class="form-control" name="tmpt_lahir_wanita" required value="${res.tmpt_lahir}" id="tmpt_lahir_wanita">
+                <input type="text" class="form-control" name="tmpt_lahir_wanita" disabled required value="${res.tmpt_lahir}" id="tmpt_lahir_wanita">
             </div>
             <div class="form-group" style="margin-bottom:1rem">
                 <label for="tgl_lahir_wanita">Tanggal Lahir</label>
-                <input type="date" class="form-control" name="tgl_lahir_wanita" required value="${res.tgl_lahir}" id="tgl_lahir_wanita">
+                <input type="date" class="form-control" name="tgl_lahir_wanita" disabled required value="${res.tgl_lahir}" id="tgl_lahir_wanita">
                 <small style="font-weight:500">${res.tgl_lahir_format}</small>
             </div>
             <div class="form-group">
@@ -695,11 +694,11 @@ class Component {
             </div>
             <div class="form-group">
                 <label for="nama_ayah_wanita">Nama Ayah</label>
-                <input class="form-control" name="nama_ayah_wanita" required value="${res.kkj_kepala_keluarga.nama}" id="nama_ayah_wanita">
+                <input class="form-control" name="nama_ayah_wanita" disabled required value="${res.kepala_keluarga.nama}" id="nama_ayah_wanita">
             </div>
             <div class="form-group">
                 <label for="nama_ibu_wanita">Nama Ibu</label>
-                <input class="form-control" name="nama_ibu_wanita" required value="${res.kkj_pasangan ? res.kkj_pasangan.nama : 'Tidak Ada'}" id="nama_ibu_wanita">
+                <input class="form-control" name="nama_ibu_wanita" disabled required value="${res.pasangan ? res.pasangan.nama : 'Tidak Ada'}" id="nama_ibu_wanita">
             </div>
             <div class="form-group">
                 <label for="">Foto Wanita</label>

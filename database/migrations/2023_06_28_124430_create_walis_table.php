@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateKkjKepalaKeluargasTable extends Migration
+class CreateWalisTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateKkjKepalaKeluargasTable extends Migration
      */
     public function up()
     {
-        Schema::create('kkj_kepala_keluargas', function (Blueprint $table) {
+        Schema::create('walis', function (Blueprint $table) {
             $table->id();
             $table->foreignId("kkj_id")->constrained()->onDelete("cascade");
             $table->string("nama");
@@ -23,7 +23,9 @@ class CreateKkjKepalaKeluargasTable extends Migration
             $table->string("pendidikan_terakhir");
             $table->string("pekerjaan");
             $table->date("baptis");
+            $table->enum("status", ["kepala keluarga", 'pasangan']);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -34,6 +36,6 @@ class CreateKkjKepalaKeluargasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kkj_kepala_keluargas');
+        Schema::dropIfExists('walis');
     }
 }
