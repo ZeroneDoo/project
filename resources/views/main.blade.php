@@ -39,6 +39,19 @@
 </head>
 
 <body>
+    @if (Auth::check())
+        <div class="p-4 mb-4" style="display: flex; align-items: center; justify-content: {{  !Request::is('dashboard*') ? 'space-between' : 'end' }}; gap:30px; border-bottom: 1px black solid">
+            @if (!Request::is('dashboard*'))
+                <div>
+                    <a href="{{ route('dashboard') }}" class="btn btn-primary">Dashboard</a>
+                </div>
+            @endif
+            <div style="display: flex; align-items: center; gap:30px">
+                <p>{{ Auth::user()->nama." || ". Auth::user()->role->nama }}</p>
+                <a href="{{ route('auth.logout') }}" class="btn btn-danger">Logout</a>
+            </div>
+        </div>
+    @endif
     @yield('content')
     @stack('js')
 

@@ -22,5 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('role', RoleController::class);
-Route::resource('kkj', KkjController::class);
+// Route::apiResource('role', RoleController::class);
+// Route::apiResource('kkj', KkjController::class);

@@ -11,9 +11,13 @@ use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("checkRoleSuperAdmin");
+    }
     public function index()
     {
-        $datas = Role::paginate(4);
+        $datas = Role::where("nama", "<>", "super admin")->paginate(4);
         return view("roles.index", compact('datas'));  
     }
 

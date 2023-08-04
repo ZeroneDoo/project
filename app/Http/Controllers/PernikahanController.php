@@ -6,18 +6,24 @@ use App\Models\{
     AnggotaKeluarga,
     Baptis,
     Kkj,
+    Pengantin,
     Pernikahan,
     Wali,
 };
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PernikahanController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("checkRolePernikahan");
+    }
     public function index()
     {
-        $datas = Pernikahan::with('pengantin', 'pengantin.anggota_keluarga')->paginate(4);
-
+        $datas = Pernikahan::with('pengantin', 'pengantin.anggota_keluarga')->where("status", "done")->paginate(4);
+        
         return view("pernikahan.index", compact('datas'));
     }
 
@@ -41,25 +47,53 @@ class PernikahanController extends Controller
 
     public function show(Pernikahan $pernikahan)
     {
-        //
+        if(!$pernikahan) return back()->with("msg_error", "Gagal menampilkan form edit");
+
+        $pernikahan->pengantin_pria = Pengantin::where("pernikahan_id", $pernikahan->id)->where("jk",'pria')->whereNull("deleted_at")->first();
+        $pernikahan->pengantin_wanita = Pengantin::where("pernikahan_id", $pernikahan->id)->where("jk",'wanita')->whereNull("deleted_at")->first();
+        $kkj = $pernikahan->pengantin_pria->anggota_keluarga ? $pernikahan->pengantin_pria->anggota_keluarga->kkj : $pernikahan->pengantin_wanita->anggota_keluarga->kkj;
+        $baptis = $pernikahan->pengantin_pria->anggota_keluarga ? $pernikahan->pengantin_pria->anggota_keluarga->baptiss : $pernikahan->pengantin_wanita->anggota_keluarga->baptiss->last();
+
+        $pernikahan->kepala_keluarga = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'kepala keluarga' AND deleted_at is NULL")[0];
+        $pernikahan->pasangan = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'pasangan' AND deleted_at is NULL")[0];
+        $pernikahan->baptiss = $baptis;
+        $pernikahan->kkj = $kkj;
+
+        if($pernikahan->status == "done"){
+            send_pdf_email($pernikahan, $pernikahan->email, 'pernikahan');
+            return redirect()->route("pernikahan.index")->with("msg_success", "Berhasil mengirim email");
+        }
+
+        return redirect()->route("pernikahan.index")->with("msg_info", "Belum bisa mengirim email");
     }
 
     public function edit($id)
     {
-        $data = Pernikahan::with('pengantin_pria', 'pengantin_wanita')->find($id);
-        return view('pernikahan.form', compact('data'));
+        $data = Pernikahan::with('pengantin')->find($id);
+        if(!$data) return back()->with("msg_error", "Gagal menampilkan form edit");
+
+        $data->pengantin_pria = Pengantin::where("pernikahan_id", $data->id)->where("jk",'pria')->whereNull("deleted_at")->first();
+        $data->pengantin_wanita = Pengantin::where("pernikahan_id", $data->id)->where("jk",'wanita')->whereNull("deleted_at")->first();
+        $kkj = $data->pengantin_pria->anggota_keluarga ? $data->pengantin_pria->anggota_keluarga->kkj : $data->pengantin_wanita->anggota_keluarga->kkj;
+        $baptis = $data->pengantin_pria->anggota_keluarga ? $data->pengantin_pria->anggota_keluarga->baptiss : $data->pengantin_wanita->anggota_keluarga->baptiss->last();
+
+        $data->kepala_keluarga = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'kepala keluarga' AND deleted_at is NULL")[0];
+        $data->pasangan = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'pasangan' AND deleted_at is NULL")[0];
+        $data->baptiss = $baptis;
+        $data->kkj = $kkj;
+
+        return view('pernikahan.formEdit', compact('data'));
     }
 
     public function update(Request $request, $id)
     {
-        try {
+        // try {
             $data = edit_form_pernikahan($request->all(), $id);
-            send_pdf_email($data, $request->email, 'pernikahan');
 
             return redirect()->route('pernikahan.index')->with('msg_success', "Berhasil mengubah formulir pernikahan");
-        } catch (\Throwable $th) {
-            return redirect()->route('pernikahan.index')->with('msg_error', "Gagal mengubah formulir pernikahan");
-        }
+        // } catch (\Throwable $th) {
+        //     return redirect()->route('pernikahan.index')->with('msg_error', "Gagal mengubah formulir pernikahan");
+        // }
     }
 
     public function destroy(Pernikahan $pernikahan)

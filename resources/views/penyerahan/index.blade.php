@@ -8,9 +8,9 @@ Penyerahan
 <div style="margin: 3rem auto; width: 91%">
     <div class="card">
         <div class="card-body">
-            {{-- <div class="card-title">
-                <a href="{{ route('baptis.create') }}" class="btn btn-primary">Tambah User</a>
-            </div> --}}
+            <div class="card-title">
+                <a href="{{ route('penyerahan.create') }}" class="btn btn-primary">Tambah Penyerahan</a>
+            </div>
             <div style="overflow: auto;">
                 <table class="table">
                     <thead>
@@ -19,6 +19,7 @@ Penyerahan
                             <th>Nama</th>
                             <th>Tanggal Penyerahan</th>
                             <th>Pendeta</th>
+                            <th>Foto</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -29,8 +30,10 @@ Penyerahan
                             <td>{{ $data->anggota_keluarga->nama }}</td>
                             <td>{{ Carbon\Carbon::parse($data->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</td>
                             <td>{{ $data->pendeta }}</td>
+                            <td><img src="{{ asset('storage/'.$data->foto) }}" style="width: 100px; object-fit: cover" alt=""></td>
                             <td>
                                 <div style="display: flex; gap: 5px;">
+                                    <a href="{{ route('penyerahan.show', $data->id) }}" class="btn btn-info">Send Email</a>
                                     <a href="{{ route('penyerahan.edit', $data->id) }}" class="btn btn-warning">Edit</a>
                                     <form action="{{ route('penyerahan.destroy', $data->id) }}" method="POST">
                                         @csrf

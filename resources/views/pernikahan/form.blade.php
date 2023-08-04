@@ -1,15 +1,12 @@
 @extends('main')
 
 @section('title')
-{{ isset($data) ? 'Edit Data Pernikahan' : 'Buat Data Pernikahan' }}
+Buat Data Pernikahan
 @endsection
 
 @section('content')
-<form action="{{ isset($data) ? route('pernikahan.update', $data->id) : route('pernikahan.store') }}" method="post" enctype="multipart/form-data">
+<form action="{{ route('pernikahan.store') }}" method="post" enctype="multipart/form-data">
     @csrf
-    @if (isset($data))
-        @method('patch')
-    @endif
     <div  style="margin:1rem auto; width: 91%">
         @if (!isset($data))
         <div class="card" style="margin-bottom: 1rem">
@@ -32,7 +29,7 @@
         </div>
         @endif
         {{-- form --}}
-        <div class="card" id="card_pria" style="margin-bottom: 1rem" {{ isset($data) ? '' : "hidden"}}>
+        <div class="card" id="card_pria" style="margin-bottom: 1rem" hidden>
             <div class="card-body">
                 {{-- data pria --}}
                 <div id="pengantin_pria">

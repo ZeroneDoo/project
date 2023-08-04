@@ -13,10 +13,10 @@ class CreateBaptisTable extends Migration
             $table->foreignId('kkj_id')->constrained()->onDelete('cascade');
             $table->foreignId('anggota_keluarga_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamp('waktu');
-            $table->string('pendeta');
+            $table->string('pendeta')->nullable();
             $table->string('foto')->nullable();
-            $table->enum('status', ['waiting', 'done']);
             $table->timestamps();
+            $table->enum('status', ['waiting', 'done']);
             $table->softDeletes();
         });
     }

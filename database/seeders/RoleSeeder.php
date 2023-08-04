@@ -10,8 +10,9 @@ class RoleSeeder extends Seeder
     public function run()
     {
         $datas = [
+            "Super Admin",
             "Admin Baptis",
-            "Admin Penyerahan Anak",
+            "Admin Penyerahan",
             "Admin Kartu Keluarga",
             "Admin Pernikahan",
             "Admin Doa",

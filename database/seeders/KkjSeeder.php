@@ -30,40 +30,41 @@ class KkjSeeder extends Seeder
             "kabupaten" => "Kota Depok",
             "kecamatan" => "Sukma Jaya",
             "status_menikah" => "Sudah Menikah",
-            "cabang" => "Jakarta"
+            "cabang" => "Jakarta",
+            "status" => "waiting"
         ];
 
         $kkj = Kkj::create($dataKkj);
 
         // kepala keluarga
-        $dataKepalaKeluarga = [
-            "kkj_id" => $kkj->id,
-            "nama" => "Kevin",
-            "jk" => "L",
-            "tmpt_lahir" => "Depok",
-            "tgl_lahir" => "2023-07-07",
-            "pendidikan_terakhir" => 'SMA',
-            "pekerjaan" => "Buruh",
-            "baptis" => "2023-07-07",
-            "status" => "kepala keluarga"
+        $walis = [
+            [
+                "kkj_id" => $kkj->id,
+                "nama" => "Kevin",
+                "jk" => "L",
+                "tmpt_lahir" => "Depok",
+                "tgl_lahir" => "2023-07-07",
+                "pendidikan_terakhir" => 'SMA',
+                "pekerjaan" => "Buruh",
+                "baptis" => "2023-07-07",
+                "status" => "kepala keluarga"
+            ],
+            [
+                "kkj_id" => $kkj->id,
+                "nama" => "Christina",
+                "jk" => "P",
+                "tmpt_lahir" => "Depok",
+                "tgl_lahir" => "2023-07-07",
+                "pendidikan_terakhir" => "SMK",
+                "pekerjaan" => "PNS",
+                "baptis" => "2023-07-07",
+                "status" => "pasangan"
+            ]
         ];
 
-        Wali::create($dataKepalaKeluarga);
-        
-        // pasangan
-        $dataPasangan = [
-            "kkj_id" => $kkj->id,
-            "nama" => "Christina",
-            "jk" => "P",
-            "tmpt_lahir" => "Depok",
-            "tgl_lahir" => "2023-07-07",
-            "pendidikan_terakhir" => "SMK",
-            "pekerjaan" => "PNS",
-            "baptis" => "2023-07-07",
-            "status" => "pasangan"
-        ];
-
-         Wali::create($dataPasangan);
+        foreach($walis as $wali ){
+            Wali::create($wali);
+        }
 
         $dataAnak = [
             "kkj_id" => $kkj->id,

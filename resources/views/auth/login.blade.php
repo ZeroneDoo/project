@@ -19,9 +19,9 @@
                             style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="email">
                     </div> --}}
                     <div class="form-group">
-                        <label for="nip">NIP</label>
-                        <input type="number" required class="form-control" name="nip" value="{{ old('nip') }}"
-                            style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="nip">
+                        <label for="nip">NIP/Email</label>
+                        <input type="text" required class="form-control" name="nip_email" value="{{ old('nip') }}"
+                            style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="nip_email">
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>

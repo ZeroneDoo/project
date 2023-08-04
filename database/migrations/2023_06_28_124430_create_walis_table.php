@@ -23,6 +23,9 @@ class CreateWalisTable extends Migration
             $table->string("pendidikan_terakhir");
             $table->string("pekerjaan");
             $table->date("baptis");
+            $table->string("foto")->nullable();
+            $table->string("foto_baptis")->nullable();
+            $table->string("foto_kk")->nullable();
             $table->enum("status", ["kepala keluarga", 'pasangan']);
             $table->timestamps();
             $table->softDeletes();

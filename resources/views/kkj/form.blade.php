@@ -140,6 +140,16 @@
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="baptis_date">
                         </div>
                         <div class="form-group">
+                            <label for="foto">Foto Kartu Keluarga *</label>
+                            <input type="file" {{ isset($data) ? '' : 'required' }} class="form-control" name="foto_kk"
+                                style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="foto">
+                        </div>
+                        <div class="form-group">
+                            <label for="foto">Foto Fomulir Baptis *</label>
+                            <input type="file" {{ isset($data) ? '' : 'required' }} class="form-control" name="foto_baptis"
+                                style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="foto">
+                        </div>
+                        <div class="form-group">
                             <label for="foto">Foto Kepala Keluarga *</label>
                             <input type="file" {{ isset($data) ? '' : 'required' }} class="form-control" name="foto"
                                 style="margin-top: 0.75rem; margin-bottom: 0.75rem" id="foto">
@@ -269,7 +279,7 @@
             {{-- list --}}
             {{-- ajax --}}
             @if (isset($data))
-                @foreach ($anaks as $anak)
+                @foreach ($anaks as $i => $anak)
                 <div class="col-sm-6">
                     <input type="hidden" required name="id_anak[]" value="{{ $anak->id }}" id="id_anak">
                         <div class="card">
@@ -325,11 +335,16 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="baptis_anak_edit">Baptis Selam *</label>
-                                    <select name="baptis_anak_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_anak_edit">
+                                    <select name="baptis_anak_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_anak_edit" onchange="Component.inputBaptisKkjAnak(this, {{ $i }})">
                                         <option value="" hidden selected>Baptis Selam</option>
                                         <option {{ isset($data) ? ($anak->baptis == "Y" ? 'selected' : '') : '' }} value="Y">Iya</option>
                                         <option {{ isset($data) ? ($anak->baptis == "T" ? 'selected' : '') : '' }} value="T">Tidak</option>
                                     </select>
+                                </div>
+                                <div class="form-group" id="inputBaptisAnak{{ $i }}">
+                                    @if($anak->baptis == "Y")
+                                    <input type="date" class="form-control" name="waktu_baptis_anak_edit[]">
+                                    @endif
                                 </div>
                                 <div class="form-group">
                                     <label for="nikah_anak_edit">Nikah *</label>
@@ -420,11 +435,17 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="baptis_keluarga_edit">Baptis Selam *</label>
-                                    <select name="baptis_keluarga_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_keluarga_edit">
+                                    <select name="baptis_keluarga_edit[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_keluarga_edit" onchange="Component.inputBaptisKkjKeluarga(this, {{ $i }})">
                                         <option value="" hidden selected>Baptis Selam</option>
                                         <option {{ $keluarga->baptis == "Y" ? 'selected' : "" }} value="Y">Iya</option>
                                         <option {{ $keluarga->baptis == "T" ? 'selected' : "" }} value="T">Tidak</option>
                                     </select>
+                                </div>
+                                <div class="form-group" id="inputBaptisKeluarga{{ $i }}">
+                                    {{-- untuk menginsert date baptis --}}
+                                    @if($keluarga->baptis == "Y")
+                                    <input type="date" class="form-control" name="waktu_baptis_keluarga_edit[]" value="{{ $keluarga->baptis == "Y" ? Carbon\Carbon::parse($keluarga->baptiss->first()->waktu)->format("Y-m-d"): '' }}">
+                                    @endif
                                 </div>
                                 <div class="form-group">
                                     <label for="nikah_keluarga_edit">Nikah *</label>

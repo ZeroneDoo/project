@@ -1,6 +1,7 @@
 class Component {
     static dataPengantin;
     static num_keluarga = 1;
+    static num_anak = 1;
 
     static getProvinsi = async (prev = "") => {
         await $.ajax({
@@ -125,13 +126,13 @@ class Component {
     }
 
     static tambahAnak = () => {
-        let num = 1;
+        let id = Component.num_anak
         $("#card_anak").append(`
-        <div class="col-sm-6" id="card-${num}">
+        <div class="col-sm-6" id="card-${id}">
         <input type="hidden" name="anak[]" value="anak" id="anak">
             <div class="card">
                 <div style="display: flex; justify-content: flex-end; padding: 0.75rem">
-                    <button class="btn btn-danger" type="button" onclick="Component.hapusAnak('card-${num}')">x</button>
+                    <button class="btn btn-danger" type="button" onclick="Component.hapusAnak('card-${id}')">x</button>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
@@ -180,11 +181,13 @@ class Component {
                     </div>
                     <div class="form-group">
                         <label for="baptis_anak">Baptis Selam *</label>
-                        <select name="baptis_anak[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_anak">
+                        <select name="baptis_anak[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_anak" onchange="Component.inputBaptisKkjAnak(this, ${Component.num_anak})">
                             <option value="" hidden selected>Baptis Selam</option>
                             <option value="Y">Iya</option>
                             <option value="T">Tidak</option>
                         </select>
+                    </div>
+                    <div class="form-group" id="inputBaptisAnak${Component.num_anak}">
                     </div>
                     <div class="form-group">
                         <label for="nikah_anak">Nikah *</label>
@@ -198,7 +201,18 @@ class Component {
             </div>
         </div>
         `)
-        num++
+        Component.num_anak++
+    }
+
+    static inputBaptisKkjAnak = (select, num) => {
+        let val = $(select).val()
+        if(val == "Y"){
+            $(`#inputBaptisAnak${num}`).html(`
+            <input type="date" class="form-control" name="waktu_baptis_anak[]"/>
+            `)
+        }else{
+            $(`#inputBaptisAnak${num}`).html(``)
+        }
     }
 
     static hapusAnak = (id) => {
@@ -207,7 +221,6 @@ class Component {
     
     static tambahKeluarga = ({hubungan: hubungans}) => {
         let values = JSON.parse(hubungans)
-        console.log(Component.num_keluarga)
         $("#card_keluarga").append(`
         <div class="col-sm-6" id="card-keluarga-${Component.num_keluarga}" style='margin-bottom:1rem;'>
         <input type="hidden" name="keluarga[]" required value="keluarga" id="keluarga">
@@ -262,11 +275,13 @@ class Component {
                     </div>
                     <div class="form-group">
                         <label for="baptis_keluarga">Baptis Selam *</label>
-                        <select name="baptis_keluarga[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_keluarga">
+                        <select name="baptis_keluarga[]" required style="margin-top: 0.75rem; margin-bottom: 0.75rem" class="form-select" id="baptis_keluarga" onchange="Component.inputBaptisKkjKeluarga(this, ${Component.num_keluarga})">
                             <option value="" hidden selected>Baptis Selam</option>
                             <option value="Y">Iya</option>
                             <option value="T">Tidak</option>
                         </select>
+                    </div>
+                    <div class="form-group" id="inputBaptisKeluarga${Component.num_keluarga}">
                     </div>
                     <div class="form-group">
                         <label for="nikah_keluarga">Nikah *</label>
@@ -291,6 +306,17 @@ class Component {
         </div>
         `)
         Component.num_keluarga++
+    }
+
+    static inputBaptisKkjKeluarga = (select, num) => {
+        let val = $(select).val()
+        if(val == "Y"){
+            $(`#inputBaptisKeluarga${num}`).html(`
+            <input type="date" class="form-control" name="waktu_baptis_keluarga[]"/>
+            `)
+        }else{
+            $(`#inputBaptisKeluarga${num}`).html(``)
+        }
     }
 
     static hubunganInput = (select, id_input, name) => {
@@ -351,7 +377,6 @@ class Component {
     static getDataKandidat = ({route:route,select:select, token:token}) => {
         let value = $(select).val()
         let hubungan = $("#hubungan").val()
-
         $.ajax({
             type: "POST",
             url: route,
@@ -396,23 +421,6 @@ class Component {
                             <input type="text" disabled class="form-control" value="${res.pasangan ?res.pasangan.nama : 'Tidak Ada'}">
                         </div>`
                     )
-
-                    // input checkbox
-                    if(res.baptis == "Y") {
-                        $("#baptis").prop("checked", true)
-                        $("#baptis").prop("disabled", true)
-                    }else{
-                        $("#baptis").prop("checked", false)
-                        $("#baptis").prop("disabled", false)
-                    }
-
-                    if(res.diserahkan == "Y") {
-                        $("#penyerahan").prop("checked", true)
-                        $("#penyerahan").prop("disabled", true)
-                    }else{
-                        $("#penyerahan").prop("checked", false)
-                        $("#penyerahan").prop("disabled", false)
-                    }
                 }
             }
         });

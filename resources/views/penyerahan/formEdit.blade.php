@@ -1,12 +1,12 @@
 @extends('main')
 
 @section('title')
-    Baptis
+    Edit Penyerahan
 @endsection
 
 @section('content')
 <div class="card" style="margin:1rem auto; width: 91%">
-    <form action="{{ isset($data) ? route('baptis.update', $data->id) : route('baptis.store') }}" method="post" enctype="multipart/form-data">
+    <form action="{{ isset($data) ? route('penyerahan.update', $data->id) : route('penyerahan.store') }}" method="post" enctype="multipart/form-data">
         @csrf
         @method('patch')
         <div class="card-body">
@@ -20,7 +20,7 @@
                             <input type="text" disabled value="{{ isset($data) ? $data->anggota_keluarga->nama : '' }}" name="nama" class="form-control">
                         </div>
                         <div class="col-5">
-                            <input type="text" disabled value="{{ isset($data) ? ($data->anggota_keluarga->jk == 'L' ? 'Laki-Laki':'Perempuan') : '' }}" name="jk" class="form-control">
+                            <input type="text" disabled value="{{ isset($data) ? ($data->anggota_keluarga->jk == 'L' ? 'Laki-Laki':'Perempuan' ) : '' }}" name="jk" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
             </div>
             {{-- /data kandidat --}}
             <div class="form-group">
-                <label for="waktu">Tanggal Baptis</label>
+                <label for="waktu">Tanggal Penyerahan</label>
                 <input type="datetime-local" class="form-control" value="{{ isset($data) ? $data->waktu : '' }}" name="waktu" id="waktu" required>
             </div>
             <div class="form-group">
@@ -55,6 +55,7 @@
                 <input type="file" class="form-control" id="foto" name="foto" {{ isset($data) ? '' : 'required' }}>
             </div>
             <button class="btn btn-primary" style="margin-top: 1rem">Submit</button>
+            <a href="{{ route('penyerahan.index') }}" class="btn btn-danger" style="margin-top: 1rem">Back</a>
         </div>
     </form>
 </div>

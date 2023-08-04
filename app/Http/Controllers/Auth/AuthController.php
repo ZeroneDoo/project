@@ -21,8 +21,7 @@ class AuthController extends Controller
     public function storeLogin(StoreRequest $request)
     {
         try {
-            // $user = User::with('role')->where("email", $request->email)->first();
-            $user = User::with('role')->where("nip", $request->nip)->first();
+            $user = User::with('role')->where("nip", $request->nip_email)->orWhere("email", $request->nip_email)->first();
 
             if(!$user || !Hash::check($request->password, $user->password)) return redirect()->route('auth.store.login')->with("msg_error", "Email atau password salah");
             
@@ -31,5 +30,13 @@ class AuthController extends Controller
             return redirect()->route('dashboard')->with("msg_success", "Berhasil login");
         } catch (\Throwable $th) {
         }
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+        return redirect()->route('auth.login');
     }
 }

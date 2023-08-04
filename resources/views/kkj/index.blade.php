@@ -31,6 +31,7 @@
                             <td>{{ $data->email }}</td>
                             <td>
                                 <div style="display: flex; gap: 5px;">
+                                    <a href="{{ route('kkj.show', $data->id) }}" class="btn btn-info">Kirim Email</a>
                                     <a href="{{ route('kkj.edit', $data->id) }}" class="btn btn-warning">Edit</a>
                                     <form action="{{ route('kkj.destroy', $data->id) }}" method="POST">
                                         @csrf

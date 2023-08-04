@@ -27,6 +27,7 @@ class CreateKkjsTable extends Migration
             $table->string("provinsi");
             $table->enum("status_menikah", ['Sudah Menikah', "Belum Menikah", "Cerai"]);
             $table->string("cabang");
+            $table->enum("status", ["waiting", "done"])->default("waiting");
             $table->timestamps();
             $table->softDeletes();
         });

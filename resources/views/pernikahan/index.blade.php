@@ -8,7 +8,7 @@ Pernikahan
 <div style="margin: 3rem auto; width: 91%">
     <div class="card">
         <div class="card-body">
-            <div class="card-title">
+            <div class="card-title" style="display: flex; justify-content: space-between">
                 <a href="{{ route('pernikahan.create') }}" class="btn btn-primary">Buat Pernikahan</a>
             </div>
             <div style="overflow: auto;">
@@ -26,11 +26,12 @@ Pernikahan
                         @foreach ($datas as $i => $data)
                         <tr>
                             <td>{{ $i + $datas->FirstItem() }}</td>
-                            <td>@foreach($data->pengantin as $pengantin_pria){{  $pengantin_pria->anggota_keluarga ? $pengantin_pria->anggota_keluarga->nama : ($pengantin_pria->jk == 'pria' ? $pengantin_pria->nama : '')}}@endforeach</td>
-                            <td>@foreach($data->pengantin as $pengantin_wanita){{  $pengantin_wanita->anggota_keluarga ? $pengantin_wanita->anggota_keluarga->nama : ($pengantin_wanita->jk == 'wanita' ? $pengantin_wanita->nama : '')}}@endforeach</td>
+                            <td>{{ $data->pengantin->where("jk", "pria")->last()->anggota_keluarga ? $data->pengantin->where("jk", "pria")->last()->anggota_keluarga->nama : $data->pengantin->where("jk", "pria")->last()->nama }}</td>
+                            <td>{{ $data->pengantin->where("jk", "wanita")->last()->anggota_keluarga ? $data->pengantin->where("jk", "wanita")->last()->anggota_keluarga->nama : $data->pengantin->where("jk", "wanita")->last()->nama }}</td>
                             <td>{{ Carbon\Carbon::parse($data->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</td>
                             <td>
                                 <div style="display: flex; gap: 5px;">
+                                    <a href="{{ route('pernikahan.show', $data->id) }}" class="btn btn-info">Kirim email</a>
                                     <a href="{{ route('pernikahan.edit', $data->id) }}" class="btn btn-warning">Edit</a>
                                     <form action="{{ route('pernikahan.destroy', $data->id) }}" method="POST">
                                         @csrf
