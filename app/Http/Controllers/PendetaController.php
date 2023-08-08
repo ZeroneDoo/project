@@ -4,82 +4,93 @@ namespace App\Http\Controllers;
 
 use App\Models\Pendeta;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PendetaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware("checkRoleSuperAdmin");
+    }
     public function index()
     {
-        //
+        $datas = Pendeta::where("is_active" , "1")->paginate(4);
+        return view("pendeta.index", compact('datas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        return view("pendeta.form");
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        try {
+            $data = [
+                "nama" => $request->nama,
+            ];
+
+            if($request->hasFile("foto")){
+                $path = Storage::disk("public")->put("pendeta", $request->foto);
+                $data['foto'] = $path;
+            }
+
+            Pendeta::create($data);
+
+            return redirect()->route("pendeta.index")->with("msg_success", "Berhasil menambahkan pendeta");
+        } catch (\Throwable $th) {
+            return redirect()->route("pendeta.index")->with("msg_error", "Gagal menambahkan pendeta");
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Pendeta  $pendeta
-     * @return \Illuminate\Http\Response
-     */
     public function show(Pendeta $pendeta)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Pendeta  $pendeta
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Pendeta $pendeta)
+    public function edit($id)
     {
-        //
+        $data = Pendeta::find($id);
+        return view("pendeta.form", compact('data'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Pendeta  $pendeta
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Pendeta $pendeta)
+    public function update(Request $request, $id)
     {
-        //
+        try {
+            $pendeta = Pendeta::find($id);
+
+            $data = [
+                "nama" => $request->nama,
+            ];
+
+            if($request->hasFile("foto")){
+                if(Storage::disk("public")->exists("$pendeta->foto")){
+                    Storage::disk("public")->delete("$pendeta->foto");
+                }
+                $path = Storage::disk("public")->put("pendeta", $request->foto);
+                $data['foto'] = $path;
+            }
+
+            $pendeta->update($data);
+
+            return redirect()->route("pendeta.index")->with("msg_success", "Berhasil mengubah pendeta");
+        } catch (\Throwable $th) {
+            return redirect()->route("pendeta.index")->with("msg_error", "Gagal mengubah pendeta");
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Pendeta  $pendeta
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Pendeta $pendeta)
+    public function destroy($id)
     {
-        //
+        $pendeta = Pendeta::find($id);
+
+        if(!$pendeta) abort(404);
+
+        if(Storage::disk("public")->exists("$pendeta->foto")){
+            Storage::disk("public")->delete("$pendeta->foto");
+        }
+
+        $pendeta->update(['is_active' => false]);
+
+        return redirect()->route("pendeta.index")->with("msg_success", "Berhasil menghapus pendeta");
     }
 }

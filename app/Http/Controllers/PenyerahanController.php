@@ -7,6 +7,7 @@ use App\Http\Requests\Penyerahan\{
     UpdateRequest,
 };
 use App\Models\Kkj;
+use App\Models\Pendeta;
 use App\Models\Penyerahan;
 use App\Models\Wali;
 use Carbon\Carbon;
@@ -28,7 +29,8 @@ class PenyerahanController extends Controller
 
     public function create()
     {
-        return view("penyerahan.formCreate");
+        $pendetas = Pendeta::where("is_active", "1")->get();
+        return view("penyerahan.formCreate", compact("pendetas"));
     }
 
     public function store(StoreRequest $request)
@@ -39,10 +41,9 @@ class PenyerahanController extends Controller
                 "kkj_id" => $kkj->id,
                 'anggota_keluarga_id' => $request->id,
                 'waktu' => Carbon::parse($request->waktu, 'Asia/Jakarta'),
-                'pendeta' => $request->pendeta,
+                'pendeta_id' => $request->pendeta,
                 "status" => "waiting"
             ]; 
-
             if($request->foto){
                 $path = Storage::disk('public')->put('penyerahan', $request->foto);
                 $data['foto'] = $path;
@@ -74,8 +75,9 @@ class PenyerahanController extends Controller
         $data = Penyerahan::with('kkj', 'anggota_keluarga')->find($id);
         $data->kepala_keluarga = Wali::where('kkj_id', $data->kkj->id)->where('status', 'kepala keluarga')->first();
         $data->pasangan = Wali::where('kkj_id', $data->kkj->id)->where('status', 'pasangan')->first();
+        $pendetas = Pendeta::where("is_active", "1")->get();
 
-        return view('penyerahan.formEdit', compact('data'));
+        return view('penyerahan.formEdit', compact('data', "pendetas"));
     }
 
     public function update(UpdateRequest $request, $id)
@@ -106,10 +108,13 @@ class PenyerahanController extends Controller
 
     public function destroy($id)
     {
-        $penyerahan = Penyerahan::with('kkj_anak')->find($id);
+        $penyerahan = Penyerahan::find($id);
         if(!$penyerahan) return abort(403, "TIDAK ADA DATA TERSEBUT");
 
-        $penyerahan->kkj_anak->update(['diserahkan' => 'T']);
+        if(Storage::disk("public")->exists("$penyerahan->foto")){
+            Storage::disk("public")->delete("$penyerahan->foto");
+        }
+
         $penyerahan->delete();
 
         return redirect()->route("penyerahan.index")->with("msg_success", "Berhasil menghapus formulir penyerahan");

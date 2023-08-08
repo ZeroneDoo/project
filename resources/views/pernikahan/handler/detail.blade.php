@@ -17,7 +17,7 @@
                             <label for="nama_pria">Nama Pria : {{ $data->pengantin_pria->anggota_keluarga ? $data->pengantin_pria->anggota_keluarga->nama : $data->pengantin_pria->nama }}</label>
                         </div>
                         <div class="form-group">
-                            <label for="">Hari, Tanggal Baptis Selam : {{ Carbon\Carbon::parse($data->pengantin_pria->anggota_keluarga ?$data->baptiss->waktu : $data->pengantin_pria->waktu_baptis, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</label>
+                            <label for="">Hari, Tanggal Baptis Selam : {{ Carbon\Carbon::parse($data->pengantin_pria->anggota_keluarga ? $data->baptiss->waktu : $data->pengantin_pria->waktu_baptis, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</label>
                         </div>
                         <div class="form-group">
                             <label for="gereja_pria">Baptis di Gereja : {{ $data->pengantin_pria->gereja }}</label>
@@ -47,7 +47,7 @@
                             <label for="nama_ayah_pria">Nama Ayah : {{ $data->pengantin_pria->anggota_keluarga ? $data->kepala_keluarga->nama : $data->pengantin_pria->nama_ayah }}</label>
                         </div>
                         <div class="form-group">
-                            <label for="nama_ibu_pria">Nama Ibu : {{ $data->pengantin_pria->anggota_keluarga ? $data->pasangan->nama : $data->pengantin_pria->nama_ibu }}</label>
+                            <label for="nama_ibu_pria">Nama Ibu : {{ $data->pengantin_pria->anggota_keluarga ? ( $data->pasangan ? $data->pasangan->nama : "" ) : $data->pengantin_pria->nama_ibu }}</label>
                         </div>
                     </div>
                 </div>
@@ -91,7 +91,7 @@
                             <label for="nama_ayah_pria">Nama Ayah : {{ $data->pengantin_wanita->anggota_keluarga ? $data->kepala_keluarga->nama : $data->pengantin_wanita->nama_ayah }}</label>
                         </div>
                         <div class="form-group">
-                            <label for="nama_ibu_pria">Nama Ibu : {{ $data->pengantin_wanita->anggota_keluarga ? $data->pasangan->nama : $data->pengantin_wanita->nama_ibu }}</label>
+                            <label for="nama_ibu_pria">Nama Ibu : {{ $data->pengantin_wanita->anggota_keluarga ? ($data->pasangan ? $data->pasangan->nama : '') : $data->pengantin_wanita->nama_ibu }}</label>
                         </div>
                     </div>
                 </div>

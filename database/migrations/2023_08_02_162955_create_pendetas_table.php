@@ -16,7 +16,8 @@ class CreatePendetasTable extends Migration
         Schema::create('pendetas', function (Blueprint $table) {
             $table->id();
             $table->string("nama");
-            $table->boolean("is_active");
+            $table->string("foto")->nullable();
+            $table->boolean("is_active")->default(true);
             $table->timestamps();
             $table->softDeletes();
         });

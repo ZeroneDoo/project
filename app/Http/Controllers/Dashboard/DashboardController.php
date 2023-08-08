@@ -23,6 +23,8 @@ class DashboardController extends Controller
             $datas = Penyerahan::with('anggota_keluarga')->where("status", "waiting")->paginate(4);
         }elseif (Auth::user()->role->nama == "Admin Pernikahan"){
             $datas = Pernikahan::with('pengantin', 'pengantin.anggota_keluarga')->where('status', "waiting")->paginate(4);
+        }else if (Auth::user()->role->nama == "Super Admin"){
+            $datas = null;
         }
 
         return view("dashboard", compact('datas'));

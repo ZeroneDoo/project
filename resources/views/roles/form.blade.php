@@ -9,7 +9,7 @@
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">{{ isset($data) ? 'Edit Role' : 'Tambah Role' }}</h5>
-            <form method="POST" action="{{ route('role.store') }}">
+            <form method="POST" action="{{ isset($data) ? route('role.update', $data->id) : route('role.store') }}">
                 @csrf
                 <div class="form-group">
                     <label for="nama">Nama Role</label>

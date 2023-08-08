@@ -15,10 +15,9 @@ class AnggotaKeluarga extends Model
 
         static::deleting(function ($post) {
             $post->baptiss()->delete();
+            $post->penyerahan()->delete();
         });
     }
-
-
 
     public function kkj(){
         return $this->belongsTo(Kkj::class);
@@ -26,5 +25,9 @@ class AnggotaKeluarga extends Model
 
     public function baptiss(){
         return $this->hasMany(Baptis::class);
+    
+    }
+    public function penyerahan(){
+        return $this->hasMany(Penyerahan::class);
     }
 }

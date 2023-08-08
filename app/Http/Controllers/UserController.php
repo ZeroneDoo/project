@@ -21,13 +21,13 @@ class UserController extends Controller
     }
     public function index()
     {
-        $datas = User::with('role')->paginate(4);
+        $datas = User::with('role')->where("nama","<>", "Super Admin")->paginate(4);
         return view("admin.index", compact('datas'));
     }
 
     public function create()
     {
-        $roles = Role::all();
+        $roles = Role::all()->where("nama", "<>", "Super Admin");
         return view('admin.form', compact('roles'));
     }
 

@@ -110,10 +110,10 @@ class HandlerController extends Controller
         $data->pengantin_pria = Pengantin::where("pernikahan_id", $data->id)->where("jk",'pria')->whereNull("deleted_at")->first();
         $data->pengantin_wanita = Pengantin::where("pernikahan_id", $data->id)->where("jk",'wanita')->whereNull("deleted_at")->first();
         $kkj = $data->pengantin_pria->anggota_keluarga ? $data->pengantin_pria->anggota_keluarga->kkj : $data->pengantin_wanita->anggota_keluarga->kkj;
-        $baptis = $data->pengantin_pria->anggota_keluarga ? $data->pengantin_pria->anggota_keluarga->baptiss : $data->pengantin_wanita->anggota_keluarga->baptiss->last();
+        $baptis = $data->pengantin_pria->anggota_keluarga ? $data->pengantin_pria->anggota_keluarga->baptiss->last() : $data->pengantin_wanita->anggota_keluarga->baptiss->last();
 
         $data->kepala_keluarga = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'kepala keluarga' AND deleted_at is NULL")[0];
-        $data->pasangan = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'pasangan' AND deleted_at is NULL")[0];
+        $data->pasangan = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'pasangan' AND deleted_at is NULL")&&[0];
         $data->baptiss = $baptis;
         $data->kkj = $kkj;
 
@@ -133,10 +133,10 @@ class HandlerController extends Controller
         $data->pengantin_pria = Pengantin::where("pernikahan_id", $data->id)->where("jk",'pria')->whereNull("deleted_at")->first();
         $data->pengantin_wanita = Pengantin::where("pernikahan_id", $data->id)->where("jk",'wanita')->whereNull("deleted_at")->first();
         $kkj = $data->pengantin_pria->anggota_keluarga ? $data->pengantin_pria->anggota_keluarga->kkj : $data->pengantin_wanita->anggota_keluarga->kkj;
-        $baptis = $data->pengantin_pria->anggota_keluarga ? $data->pengantin_pria->anggota_keluarga->baptiss : $data->pengantin_wanita->anggota_keluarga->baptiss->last();
+        $baptis = $data->pengantin_pria->anggota_keluarga ? $data->pengantin_pria->anggota_keluarga->baptiss->last() : $data->pengantin_wanita->anggota_keluarga->baptiss->last();
         
         $data->kepala_keluarga = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'kepala keluarga' AND deleted_at is NULL")[0];
-        $data->pasangan = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'pasangan' AND deleted_at is NULL")[0];
+        $data->pasangan = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'pasangan' AND deleted_at is NULL")&&[0];
         $data->baptiss = $baptis;
         $data->kkj = $kkj;
 

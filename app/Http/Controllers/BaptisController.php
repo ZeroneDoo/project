@@ -9,6 +9,7 @@ use App\Http\Requests\Baptis\{
 use App\Models\AnggotaKeluarga;
 use App\Models\Baptis;
 use App\Models\Kkj;
+use App\Models\Pendeta;
 use App\Models\Wali;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -29,7 +30,8 @@ class BaptisController extends Controller
 
     public function create()
     {
-        return view("baptis.formCreate");
+        $pendetas = Pendeta::where("is_active", "1")->get();
+        return view("baptis.formCreate", compact('pendetas'));
     }
 
     public function store(StoreRequest $request)
@@ -77,8 +79,9 @@ class BaptisController extends Controller
         $data = Baptis::with('kkj', 'anggota_keluarga')->find($id);
         $data->kepala_keluarga = DB::table('walis')->select("*")->where("kkj_id", $data->kkj->id)->where("status", "kepala keluarga")->whereNull("deleted_at")->first();
         $data->pasangan = DB::table('walis')->select("*")->where("kkj_id", $data->kkj->id)->where("status", "pasangan")->whereNull("deleted_at")->first();
-        
-        return view("baptis.formEdit", compact("data"));
+        $pendetas = Pendeta::where("is_active", "1")->get();
+
+        return view("baptis.formEdit", compact("data", "pendetas"));
     }
 
     public function update(UpdateRequest $request, $id)
@@ -115,6 +118,10 @@ class BaptisController extends Controller
     {
         $baptis = Baptis::find($id);
         if(!$baptis) return abort(403, "TIDAK ADA DATA TERSEBUT");
+
+        if(Storage::disk("public")->exists("$baptis->foto")){
+            Storage::disk("public")->delete("$baptis->foto");
+        }
 
         $baptis->delete();
 

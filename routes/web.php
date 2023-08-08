@@ -4,23 +4,22 @@ use App\Http\Controllers\{
     BaptisController,
     HandlerController,
     KkjController,
+    PendetaController,
     PenyerahanBaptisController,
     PenyerahanController,
     PernikahanController,
     RoleController,
     UserController,
 };
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Dashboard\DashboardController;
-use Dompdf\Dompdf;
-use Dompdf\Options;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
 Route::middleware("auth")->group(function(){
     
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name("dashboard");
+    Route::get('dashboard', [DashboardController::class, 'index'])->name("dashboard");
 
+    Route::resource("pendeta", PendetaController::class);
     Route::resource('user', UserController::class);
 
     Route::resource('baptis', BaptisController::class);

@@ -29,7 +29,7 @@ Baptis
                             <td>{{ $i + $datas->FirstItem() }}</td>
                             <td>{{ $data->anggota_keluarga->nama }}</td>
                             <td>{{ Carbon\Carbon::parse($data->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</td>
-                            <td>{{ $data->pendeta }}</td>
+                            <td>{{ $data->pendeta ? $data->pendeta->nama : '' }}</td>
                             <td><img src="{{ asset('storage/'.$data->foto) }}" style="width: 200px; height: 100px;object-fit: cover" alt=""></td>
                             <td>
                                 <div style="display: flex; gap: 5px;">

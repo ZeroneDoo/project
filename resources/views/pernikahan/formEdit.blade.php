@@ -66,7 +66,7 @@ Buat Data Pernikahan
                     </div>
                     <div class="form-group">
                         <label for="nama_ibu_pria">Nama Ibu</label>
-                        <input type="text" class="form-control" name="nama_ibu_pria" {{ $data->pengantin_pria->anggota_keluarga ? 'disabled' :'' }} value="{{ $data->pengantin_pria->anggota_keluarga ? $data->pasangan->nama : $data->pengantin_pria->nama_ibu }}" id="nama_ibu_pria">
+                        <input type="text" class="form-control" name="nama_ibu_pria" {{ $data->pengantin_pria->anggota_keluarga ? 'disabled' :'' }} value="{{ $data->pengantin_pria->anggota_keluarga ? ( $data->pasangan ? $data->pasangan->nama : "" ) : $data->pengantin_pria->nama_ibu }}" id="nama_ibu_pria">
                     </div>
                     <div class="form-group">
                         <label for="">Foto Pria</label>
@@ -131,7 +131,7 @@ Buat Data Pernikahan
                     </div>
                     <div class="form-group">
                         <label for="nama_ibu_wanita">Nama Ibu</label>
-                        <input class="form-control" name="nama_ibu_wanita" {{ $data->pengantin_wanita->anggota_keluarga ? 'disabled' : '' }} value="{{  $data->pengantin_wanita->anggota_keluarga ? $data->pasangan->nama : $data->pengantin_wanita->nama_ibu  }}" id="nama_ibu_wanita">
+                        <input class="form-control" name="nama_ibu_wanita" {{ $data->pengantin_wanita->anggota_keluarga ? 'disabled' : '' }} value="{{  $data->pengantin_wanita->anggota_keluarga ? ($data->pasangan ? $data->pasangan->nama : "") : $data->pengantin_wanita->nama_ibu  }}" id="nama_ibu_wanita">
                     </div>
                     <div class="form-group">
                         <label for="">Foto Wanita</label>

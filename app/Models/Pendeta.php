@@ -11,4 +11,11 @@ class Pendeta extends Model
     use HasFactory, SoftDeletes;
     protected $guarded = ['id'];
 
+    public function penyerahan(){
+        return $this->hasMany(Penyerahan::class);
+    }
+
+    public function baptiss(){
+        return $this->hasMany(Baptis::class);
+    }
 }

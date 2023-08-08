@@ -6,7 +6,7 @@
     @if (Auth::user()->role->nama == "Super Admin")
         <a href="{{ route('role.index') }}" class="btn btn-primary">Pergi ke halaman role</a>
         <a href="{{ route('user.index') }}" class="btn btn-primary">Pergi ke halaman user</a>
-        <a href="" class="btn btn-primary">Pergi ke halaman pendeta</a>
+        <a href="{{ route('pendeta.index') }}" class="btn btn-primary">Pergi ke halaman pendeta</a>
     
     @elseif(Auth::user()->role->nama == "Admin Baptis")
         <a href="{{ route('baptis.index') }}" class="btn btn-primary">Pergi ke halaman baptis</a>
@@ -35,7 +35,7 @@
                                 <td>{{ $i + $datas->FirstItem() }}</td>
                                 <td>{{ $data->anggota_keluarga->nama }}</td>
                                 <td>{{ Carbon\Carbon::parse($data->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</td>
-                                <td>{{ $data->pendeta }}</td>
+                                <td>{{ $data->pendeta ? $data->pendeta->namaa  : ""}}</td>
                                 <td><img src="{{ asset('storage/'.$data->foto) }}" style="width: 200px; height: 100px;object-fit: cover" alt=""></td>
                                 <td><span class="p-1 btn btn-warning" style="color:white;">{{ $data->status }}</span></td>
                                 <td>
@@ -80,7 +80,7 @@
                                 <td>{{ $i + $datas->FirstItem() }}</td>
                                 <td>{{ $data->anggota_keluarga->nama }}</td>
                                 <td>{{ Carbon\Carbon::parse($data->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</td>
-                                <td>{{ $data->pendeta }}</td>
+                                <td>{{ $data->pendeta ? $data->pendeta->namaa  : ""}}</td>
                                 <td><img src="{{ asset('storage/'.$data->foto) }}" style="width: 100px; object-fit: cover" alt=""></td>
                                 <td><span class="p-1 btn btn-warning" style="color:white;">{{ $data->status }}</span></td>
                                 <td>

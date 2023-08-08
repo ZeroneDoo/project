@@ -11,9 +11,9 @@ class CreateBaptisTable extends Migration
         Schema::create('baptis', function (Blueprint $table) {
             $table->id();
             $table->foreignId('kkj_id')->constrained()->onDelete('cascade');
+            $table->foreignId('pendeta_id')->nullable();
             $table->foreignId('anggota_keluarga_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamp('waktu');
-            $table->string('pendeta')->nullable();
             $table->string('foto')->nullable();
             $table->timestamps();
             $table->enum('status', ['waiting', 'done']);

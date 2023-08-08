@@ -40,7 +40,12 @@
                 </div>
                 <div class="form-group">
                     <label for="pendeta">Pendeta</label>
-                    <input type="text" class="form-control" id="pendeta" name="pendeta" required>
+                    <select name="pendeta" id="" class="form-select" required>
+                        <option value="">Select Pendeta</option>
+                        @foreach ($pendetas as $pendeta)
+                            <option value="{{ $pendeta->id }}" {{ isset($data) ? ($pendeta->id == $data->pendeta_id ? "selected" : "") : "" }}>{{ $pendeta->nama }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="foto">Foto</label>

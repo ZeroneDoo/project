@@ -1,7 +1,7 @@
 @extends('main')
 
 @section('title')
-Penyerahan
+Pendeta
 @endsection
 
 @section('content')
@@ -9,7 +9,7 @@ Penyerahan
     <div class="card">
         <div class="card-body">
             <div class="card-title">
-                <a href="{{ route('penyerahan.create') }}" class="btn btn-primary">Tambah Penyerahan</a>
+                <a href="{{ route('pendeta.create') }}" class="btn btn-primary">Tambah Pendeta</a>
             </div>
             <div style="overflow: auto;">
                 <table class="table">
@@ -17,9 +17,8 @@ Penyerahan
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
-                            <th>Tanggal Penyerahan</th>
-                            <th>Pendeta</th>
-                            <th>Foto</th>
+                            <th>Dibuat</th>
+                            <th>Diubah</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -27,15 +26,13 @@ Penyerahan
                         @foreach ($datas as $i => $data)
                         <tr>
                             <td>{{ $i + $datas->FirstItem() }}</td>
-                            <td>{{ $data->anggota_keluarga->nama }}</td>
-                            <td>{{ Carbon\Carbon::parse($data->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</td>
-                            <td>{{ $data->pendeta ? $data->pendeta->nama : ""}}</td>
-                            <td><img src="{{ asset('storage/'.$data->foto) }}" style="width: 100px; object-fit: cover" alt=""></td>
+                            <td>{{ $data->nama }}</td>
+                            <td>{{ $data->created_at->diffForHumans() }}</td>
+                            <td>{{ $data->updated_at->diffForHumans() }}</td>
                             <td>
                                 <div style="display: flex; gap: 5px;">
-                                    <a href="{{ route('penyerahan.show', $data->id) }}" class="btn btn-info">Send Email</a>
-                                    <a href="{{ route('penyerahan.edit', $data->id) }}" class="btn btn-warning">Edit</a>
-                                    <form action="{{ route('penyerahan.destroy', $data->id) }}" method="POST">
+                                    <a href="{{ route('pendeta.edit', $data->id) }}" class="btn btn-warning">Edit</a>
+                                    <form action="{{ route('pendeta.destroy', $data->id) }}" method="POST">
                                         @csrf
                                         @method('delete')
                                         <button class="btn btn-danger">Hapus</button>

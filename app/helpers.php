@@ -582,7 +582,7 @@ if(! function_exists('create_form_pernikahan')){
         $wanita = Pengantin::create($data_wanita);
 
         $dataPernikahan->kepala_keluarga = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'kepala keluarga' AND deleted_at is NULL")[0];
-        $dataPernikahan->pasangan = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'pasangan' AND deleted_at is NULL")[0];
+        $dataPernikahan->pasangan = DB::select("SELECT * FROM walis where kkj_id = $kkj->id AND status = 'pasangan' AND deleted_at is NULL")&&[0];
         $dataPernikahan->pengantin_pria = $pria;
         $dataPernikahan->pengantin_wanita = $wanita;
         $dataPernikahan->baptiss = Baptis::where('anggota_keluarga_id', $req['id'])->first();

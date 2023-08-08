@@ -35,7 +35,7 @@
                     <label for="waktu">Tanggal Baptis : {{ Carbon\Carbon::parse($data->waktu, 'Asia/Jakarta')->translatedFormat('l, d F Y H:i') }}</label>
                 </div>
                 <div class="form-group">
-                    <label for="pendeta">Pendeta : {{ $data->pendeta }}</label>
+                    <label for="pendeta">Pendeta : {{ $data->pendeta ? $data->pendeta->nama : ""}}</label>
                 </div>
                 <div>
                     <label for="">Foto</label>

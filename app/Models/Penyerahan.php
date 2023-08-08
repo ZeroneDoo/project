@@ -19,4 +19,7 @@ class Penyerahan extends Model
     {
         return $this->belongsTo(AnggotaKeluarga::class);
     }
+    public function pendeta(){
+        return $this->belongsTo(Pendeta::class);
+    }
 }
