@@ -14,6 +14,20 @@ use App\Http\Controllers\{
 use App\Http\Controllers\Dashboard\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+
+Route::get("/testing", function(){
+    return view("tes");
+});
+
+Route::post("/gdrive", function(Request $request){
+    $documentFile = Storage::disk("public")->put("gdrive", $request->file);
+    $path = Storage::disk("public")->get($documentFile);
+    $file_ftp = Storage::disk("google")->put($request->file->getClientOriginalName(), $path);
+
+    return "ok";
+})->name("gdrive");
 
 Route::middleware("auth")->group(function(){
     

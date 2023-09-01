@@ -12,8 +12,9 @@
     <input type="text">
     <button>kirim</button>
     </form> --}}
-    <form action="{{ route('penyerahan-baptis.create') }}" method="get">
-    <input type="text" name="kode_kkj">
+    <form action="{{ route('gdrive') }}" method="post" enctype="multipart/form-data">
+    @csrf
+    <input type="file" name="file">
     <button>kirim</button>
     </form>
 </body>
