@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\{
     BaptisController,
+    CabangController,
     HandlerController,
     KkjController,
     PendetaController,
@@ -58,6 +59,13 @@ Route::middleware("auth")->group(function(){
         Route::get("/keluarga/{id}", [KkjController::class, "destroyKeluarga"])->name('destroy.keluarga');
     });
 
+    Route::resource("cabang", CabangController::class);
+    Route::prefix("cabang")->name("cabang.")->group(function(){
+        Route::get("/pendeta/{id}", [CabangController::class, "destroyPendeta"])->name("destroy.pendeta");
+        Route::get("/ibadah/{id}", [CabangController::class, "destroyJadwalIbadah"])->name("destroy.ibadah");
+        Route::get("/kegiatan/{id}", [CabangController::class, "destroyListKegiatan"])->name("destroy.kegiatan");
+    });
+    
     // handler
     Route::prefix("handler")->name("handler.")->group(function(){
         // kkj

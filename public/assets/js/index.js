@@ -715,4 +715,94 @@ class Component {
             `)
         }
     }
+
+    static listependeta = 1
+    static addListPendeta = () => {
+        const card = $("#list_pendeta");
+
+        card.append(`
+            <div id="list_pendeta_${this.listependeta}" class="mb-4" style="display: flex; gap: 10px;">
+                <input type="text" class="form-control" name="pendeta[]">
+                <button type="button" class="btn btn-danger" onclick="Component.removeListPendeta('#list_pendeta_${this.listependeta}')">x</button>
+            </div>
+        `);
+
+        this.listependeta++
+    }
+
+    static removeListPendeta = (id) => {
+        $(id).remove()
+    }
+
+    static jadwalibadah = 1
+    static addJadwalIbadah = () => {
+        const card = $("#jadwal_ibadah");
+
+        card.append(`
+            <div class="mb-4 card" id="jadwal_ibadah_${this.jadwalibadah}">
+                <div style="margin:0.75rem;display: flex; justify-content: space-between;">
+                    <div></div>
+                    <button type="button" class="btn btn-danger" onclick="Component.removeJadwalIbadah('#jadwal_ibadah_${this.jadwalibadah}')">x</button>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <input type="hidden" name="jadwal_ibadah[]>
+                    </div>
+                    <div class="form-group">
+                        <label> Hari Ibadah </label>
+                        <input type="text" class="form-control" name="hari[]">
+                    </div>
+                    <div class="form-group">
+                        <label> Waktu Ibadah </label>
+                        <input type="time" class="form-control" name="waktu[]">
+                    </div>
+                </div>
+            </div>
+        `);
+
+        this.jadwalibadah++
+    }
+
+    static removeJadwalIbadah = (id) => {
+        $(id).remove()
+    }
+
+    static cabangkegiatan = 1
+    static addListKegiatan = () => {
+        const card = $("#list_kegiatan");
+
+        card.append(`
+            <div class="mb-4 card" id="list_kegiatan_${this.cabangkegiatan}">
+                <div style="margin:0.75rem;display: flex; justify-content: space-between;">
+                    <input type="hidden" name="kegiatan[]">
+                    <div></div>
+                    <button type="button" class="btn btn-danger" onclick="Component.removeListKegiatan('#list_kegiatan_${this.cabangkegiatan}')">x</button>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label> Nama Kegiatan </label>
+                        <input type="text" class=" form-control" name="nama_kegiatan[]">
+                    </div>
+                    <div class="form-group">
+                        <label> Pendeta </label>
+                        <input type="text" class=" form-control" name="pendeta_kegiatan[]">
+                    </div>
+                    <div class="form-group">
+                        <label> Area </label>
+                        <textarea class=" form-control" name="area_kegiatan[]"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label> Waktu Kegiatan</label>
+                        <input type="datetime-local" class="form-control" name="waktu_kegiatan[]">
+                    </div>
+                </div>
+            </div>
+        `);
+
+        this.cabangkegiatan++
+    }
+
+    static removeListKegiatan = (id) => {
+        $(id).remove()
+    }
 }
